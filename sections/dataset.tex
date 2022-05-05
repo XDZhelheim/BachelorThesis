@@ -112,13 +112,6 @@ As mentioned in section 2, there are mainly three types of spatial graph that ca
 
 Having the boundary latitudes and longitudes, we can download the road network as a graph structure via Python. Figure \ref{fig: graph_before} offers the visualization of it. In short, the graph has 906 roads, 532 intersections and endpoints. However, this graph still contains plentiful tiny and redundant roads. This is mainly caused by the intersections. To be specific, a road will be cut as two roads whenever there is an intersection on it, especially for crossroads. A crossroad is represented by 12 intersection points in the graph, leading to numerous tiny roads that can be merged into main roads. There are also many other cases that needs simplification. We summarize them as the following.
 
-\begin{enumerate}
-  \item \textbf{Redundant Roads Between Neighboring Intersections.} We have illustrated the reason in the paragraph above. To eliminate them, we merge the intersection points at crossroads.
-  \item \textbf{Trailing Roads.} There are some roads not connected to the main road network at both ends. We decide to remove them since they take little effect in traffic.
-  \item \textbf{Overpasses.} Overpass is a 3D structure that cannot be reflected in a 2D map. Therefore, the GPS points on overpasses are in a mess when plotting to map, and impossible to be matched on roads. They should be deleted and leaving only the underlying main roads.
-  \item \textbf{Two-way Lanes.} Roads are bidirectional, which is faithfully reflected in the graph. However, it will cause a problem that the two lanes of a road do not share the same endpoints. For convenience, we combine them, and manually reverse the road for its bi-directionality.
-\end{enumerate}
-
 \begin{figure}[htb]
   \centering
   \caption{Road network graph before and after simplification.}
@@ -134,5 +127,42 @@ Having the boundary latitudes and longitudes, we can download the road network a
       \includegraphics[width=\textwidth]{images/graph_after.png}
       \caption{After}
       \label{fig: graph_after}
+  \end{subfigure}
+\end{figure}
+
+\begin{enumerate}
+  \item \textbf{Redundant Roads Between Neighboring Intersections.} We have illustrated the reason in the paragraph above. To eliminate them, we merge the intersection points at crossroads.
+  \item \textbf{Trailing Roads.} There are some roads not connected to the main road network at both ends. We decide to remove them since they take little effect in traffic.
+  \item \textbf{Overpasses.} Overpass is a 3D structure that cannot be reflected in a 2D map. Therefore, the GPS points on overpasses are in a mess when plotting to map, and impossible to be matched on roads. They should be deleted and leaving only the underlying main roads.
+  \item \textbf{Two-way Lanes.} Roads are bidirectional, which is faithfully reflected in the graph. However, it will cause a problem that the two lanes of a road do not share the same endpoints. For convenience, we combine them, and manually reverse the road for its bi-directionality.
+\end{enumerate}
+
+\begin{figure}[htb]
+  \centering
+  \caption{Four simplification cases.}
+  \label{fig: simplification}
+  \begin{subfigure}[t]{0.45\linewidth}
+      \centering
+      \includegraphics[width=\textwidth]{images/crossroad.png}
+      \caption{Redundant Roads}
+      \label{fig: redundant_roads}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.45\linewidth}
+      \centering
+      \includegraphics[width=\textwidth]{images/trailing_road.png}
+      \caption{Trailing Roads}
+      \label{fig: trailing_road}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.45\linewidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/overpass.png}
+    \caption{Overpass}
+    \label{fig: overpass}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.45\linewidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/two-way.png}
+    \caption{Two-way Lanes}
+    \label{fig: two-way}
   \end{subfigure}
 \end{figure}
