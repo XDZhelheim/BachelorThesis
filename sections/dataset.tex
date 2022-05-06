@@ -170,5 +170,29 @@ A visualization of these four cases is provided by figure \ref{fig: simplificati
 \end{figure}
 
 \subsection{Map Matching}
+Map matching\cite{mm} is a procedure to match a location, in this paper, a (latitude, longitude) pair, on a specific road to determine where the vehicle is travelling on. A variety of map matching algorithms have been proposed by researchers around the world in recent years, such as Hidden Markov Map Matching\cite{HMMM}, ST-Matching\cite{stmm} and Fast Map Matching\cite{fmm}. We tried several map matching functions and eventually choose Fast Map Matching (FMM) because of its fastest speed and open-source library.
+
+\begin{table}[htb]
+  \begin{center}
+      \caption{\textit{FMM} tuned parameters.}
+      \label{fmm_table}
+      \begin{tabular}{cll}
+          \toprule
+
+          \textbf{Parameter} & \textbf{Description} & \textbf{Value}\\
+
+          \midrule
+
+          $\delta$ & Upperbound & $0.03$\\
+          $k$ & Number of candidates & $8$\\
+          $r$ & Search radius & $0.003$\\
+          $e$ & GPS error & $0.0005$\\
+
+          \bottomrule
+      \end{tabular}
+  \end{center}
+\end{table}
+
+Table \ref{fmm_table} provides the tuned parameters we apply on map matching, and the description of them are taken from \textit{FMM}'s official document. As a result, we achieved $100\%$ matched percentage.
 
 \subsection{Data Interpolation}
