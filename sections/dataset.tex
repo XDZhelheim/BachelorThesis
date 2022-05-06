@@ -37,7 +37,7 @@ Data cleaning is the process of detecting and correcting (or removing) corrupt o
   \item \textbf{Duplicate Rows.} A considerable large part of the raw data are duplicate. The reason is when a GPS device is transmitting data to server, it will send several copies in order to avoid packet loss under poor Internet connection. As a result, they are completely same rows, and thus can be removed safely, leaving only the foremost one.
   \item \textbf{Corrupted Timestamp.} This is a sort of abnormal record. Since our time range is June 2020, all the timestamps that not in here should be deleted. In detail, there are two kinds of them: 1) records in May $31^{st}$ or July $1^{st}$. This is caused by the equipments' lack of accuracy. 2) 2000-01-01. And this is caused by data loss, thus, it is filled by a default value.
   \item \textbf{Missing Location.} The latitude and longitude of some records are zero, which is resulted by the data loss during transmission. These dirty values should be deleted.
-  \item \textbf{Zero Speed.} Stationary taxis are still transmitting their location information to the server if the GPS device is on, leading to a big portion of zero speed records. They are useless owing to that trajectories are a series of moving locations. Therefore, under normal circumstances, it is better to remove them. However, things are not that happy in our data. There are four kinds of zero speed records relating to the change of location, i.e. latitude and longitude, and they should be treated differently. Details are provided in the next subsection.
+  \item \textbf{Zero Speed.} Stationary taxis are still transmitting their location information to the server if the GPS device is on, leading to a big portion of zero speed records. They are useless owing to that trajectories are a series of moving locations. Therefore, under normal circumstances, it is better to remove them. However, things are not that happy in our data. There are four kinds of zero speed records relating to the change of location, i.e. latitude and longitude, and they should be treated differently. Details are provided in section 4.5.
   \item \textbf{Irrelevant Attributes.} As shown in figure \ref{fig: raw_data} above, the raw data consists of several columns. The information that have no contribution to trajectories needs to be removed, leaving only latitude, longitude, speed and timestamp.
 \end{enumerate}
 
@@ -101,7 +101,7 @@ Figure \ref{fig: gps_seq} shows that the GPS points are accurately moving along 
 \subsection{Road Network}
 As mentioned in section 2, there are mainly three types of spatial graph that categorized by its vertices, which is grid, sensor or road. For a road network graph, a vertex represents a road and an edge stands for the connectivity between two roads. The formal definition has been given in section 3.2. In short, we need to acquire real road map and construct the graph depending on it.
 
-\textit{OpenStreetMap (OSM)}\cite{osm} is a collaborative project to create a free editable geographic database of the world. It is easy to download a map and create a road network graph by \textit{OSM}'s official website\footnote{\href{https://www.openstreetmap.org/}{https://www.openstreetmap.org/}} and its Python API. Our data covers the taxi tracks over the whole Shenzhen, but it is impractical to construct the complete road network of the city due to its huge complexity. As a result, we decide to choose a small part of central business district (CBD) in Futian. The red rectangle in figure \ref{fig: gps_seq} encloses the roads we choose, and this is because \textit{OSM} can only export a rectangular region. Figure \ref{fig: roadmap} provides a closer look of these roads.
+OpenStreetMap (OSM)\cite{osm} is a collaborative project to create a free editable geographic database of the world. It is easy to download a map and create a road network graph by OSM's official website\footnote{\href{https://www.openstreetmap.org/}{https://www.openstreetmap.org/}} and its Python API. Our data covers the taxi tracks over the whole Shenzhen, but it is impractical to construct the complete road network of the city due to its huge complexity. As a result, we decide to choose a small part of central business district (CBD) in Futian. The red rectangle in figure \ref{fig: gps_seq} encloses the roads we choose, and this is because OSM can only export a rectangular region. Figure \ref{fig: roadmap} provides a closer look of these roads.
 
 \begin{figure}[htb]
   \centering
@@ -137,7 +137,7 @@ Having the boundary latitudes and longitudes, we can download the road network a
   \item \textbf{Two-way Lanes.} Roads are bidirectional, which is faithfully reflected in the graph. However, it will cause a problem that the two lanes of a road do not share the same endpoints. For convenience, we combine them, and manually reverse the road for its bi-directionality.
 \end{enumerate}
 
-A visualization of these four cases is provided by figure \ref{fig: simplification}. To handle them, we use \textit{QGIS}\footnote{\href{https://qgis.org/en/site/}{https://qgis.org/en/site/}} as a tool to redraw the graph by ourselves. \textit{QGIS} functions as geographic information system (GIS) software, allowing users to analyze and edit spatial information, in addition to composing and exporting graphical maps. Figure \ref{fig: graph_after} shows the road network graph after simplification where the four cases are eliminated thoroughly.
+A visualization of these four cases is provided by figure \ref{fig: simplification}. To handle them, we use QGIS\footnote{\href{https://qgis.org/en/site/}{https://qgis.org/en/site/}} as a tool to redraw the graph by ourselves. QGIS functions as geographic information system (GIS) software, allowing users to analyze and edit spatial information, in addition to composing and exporting graphical maps. Figure \ref{fig: graph_after} shows the road network graph after simplification where the four cases are eliminated thoroughly.
 
 \begin{figure}[htb]
   \centering
@@ -170,11 +170,11 @@ A visualization of these four cases is provided by figure \ref{fig: simplificati
 \end{figure}
 
 \subsection{Map Matching}
-Map matching\cite{mm} is a procedure to match a location, in this paper, a (latitude, longitude) pair, on a specific road to determine where the vehicle is travelling on. A variety of map matching algorithms have been proposed by researchers around the world in recent years, such as Hidden Markov Map Matching\cite{HMMM}, ST-Matching\cite{stmm} and Fast Map Matching\cite{fmm}. We tried several map matching functions and eventually choose Fast Map Matching (FMM) because of its fastest speed and open-source library.
+Map matching\cite{mm} is a procedure to match a location, in this paper, a \textit{(latitude, longitude)} pair, on a specific road to determine where the vehicle is travelling on. A variety of map matching algorithms have been proposed by researchers around the world in recent years, such as Hidden Markov Map Matching\cite{HMMM}, ST-Matching\cite{stmm} and Fast Map Matching\cite{fmm}. We tried several map matching functions and eventually choose Fast Map Matching (FMM) because of its fastest speed and open-source library.
 
 \begin{table}[htb]
   \begin{center}
-      \caption{\textit{FMM} tuned parameters.}
+      \caption{FMM tuned parameters.}
       \label{fmm_table}
       \begin{tabular}{cll}
           \toprule
@@ -183,7 +183,7 @@ Map matching\cite{mm} is a procedure to match a location, in this paper, a (lati
 
           \midrule
 
-          $\delta$ & Upperbound & $0.03$\\
+          $\delta$ & Upper bound & $0.03$\\
           $k$ & Number of candidates & $8$\\
           $r$ & Search radius & $0.003$\\
           $e$ & GPS error & $0.0005$\\
@@ -193,6 +193,28 @@ Map matching\cite{mm} is a procedure to match a location, in this paper, a (lati
   \end{center}
 \end{table}
 
-Table \ref{fmm_table} provides the tuned parameters we apply on map matching, and the description of them are taken from \textit{FMM}'s official document. As a result, we achieved $100\%$ matched percentage.
+Table \ref{fmm_table} provides the tuned parameters we apply on map matching, and the description of them are taken from FMM's official document. As a result, we achieved $100\%$ matched percentage.
 
 \subsection{Data Interpolation}
+In the data cleaning stage, we removed $70\%$ rows in the June $1^{st}$ example. Although most of them are duplicated, there are still some records that can be taken use of, which is related to the four cases of zero speed records that we mentioned in section 4.2. In addition, due to the low and unstable sampling rate of the GPS devices, \textbf{discontinuities} are prevalent in the trajectories. Here we give a detailed explanation of their causes and countermeasures.
+
+\vspace{\baselineskip}
+
+\textbf{The four zero speed cases.} Note that these cases are for consecutive records in the raw data.
+\begin{enumerate}
+  \item \textit{Location: unchanged, Timestamp: unchanged.} This is duplication, which we have already removed at first.
+  \item \textit{Location: unchanged, Timestamp: changing.} This case indicates that the vehicle is not moving, exactly what we want to delete.
+  \item \textit{Location: changing, Timestamp: unchanged.} Device abnormality, because one vehicle cannot drive on different roads at the same time. They should be deleted.
+  \item \textit{Location: changing, Timestamp: changing.} The vehicle is moving, however, its speed becomes zero. This is the part we try to interpolate. The method is, we use latitude, longitude and timestamp to calculate the real distance and time duration of the two adjacent locations, and use a simple division to compute the speed.
+\end{enumerate}
+
+\vspace{\baselineskip}
+
+\textbf{Discontinuities in trajectories.} We illustrate this problem with an example in figure \ref{fig: traj_interpolate}. The three red points are from raw data, after map matching, we get a trajectory $[r_1, r_3, r_4]$. However, owing to the topology of the road network graph, the vehicle must pass $r_2$ and $r_3$. For some reason like the low recording frequency of the GPS device, the points on $r_2$ and $r_3$ are not recorded. Fortunately, FMM is able to interpolate the missing points and output a trajectory $[r_1, r_2, r_3, r_4, r_5]$. Trajectory interpolation is \textbf{essential} because the dataset will have a very, very bad performance on traffic prediction models without it.
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=0.5\textwidth]{images/traj_interpolate.png}
+  \caption{Interpolation for the discontinuity in a trajectory.}
+  \label{fig: traj_interpolate}
+\end{figure}

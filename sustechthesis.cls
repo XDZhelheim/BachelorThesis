@@ -187,6 +187,7 @@
 % 目录
 % 无论是撰写规范还是样例都没有提到页码位置
 % 已确认页码应在正文处开始
+\renewcommand\contentsname{Contents}
 \newcommand{\目录}{
   \tableofcontents
   \clearpage
