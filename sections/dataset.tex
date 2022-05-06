@@ -101,7 +101,7 @@ Figure \ref{fig: gps_seq} shows that the GPS points are accurately moving along 
 \subsection{Road Network}
 As mentioned in section 2, there are mainly three types of spatial graph that categorized by its vertices, which is grid, sensor or road. For a road network graph, a vertex represents a road and an edge stands for the connectivity between two roads. The formal definition has been given in section 3.2. In short, we need to acquire real road map and construct the graph depending on it.
 
-\textit{OpenStreetMap (OSM)}\cite{osm} is a collaborative project to create a free editable geographic database of the world. It is easy to download a map and create a road network graph by \textit{OSM}'s official website and its Python API. Our data covers the taxi tracks over the whole Shenzhen, but it is impractical to construct the complete road network of the city due to its huge complexity. As a result, we decide to choose a small part of central business district (CBD) in Futian. The red rectangle in figure \ref{fig: gps_seq} encloses the roads we choose, and this is because \textit{OSM} can only export a rectangular region. Figure \ref{fig: roadmap} provides a closer look of these roads.
+\textit{OpenStreetMap (OSM)}\cite{osm} is a collaborative project to create a free editable geographic database of the world. It is easy to download a map and create a road network graph by \textit{OSM}'s official website\footnote{\href{https://www.openstreetmap.org/}{https://www.openstreetmap.org/}} and its Python API. Our data covers the taxi tracks over the whole Shenzhen, but it is impractical to construct the complete road network of the city due to its huge complexity. As a result, we decide to choose a small part of central business district (CBD) in Futian. The red rectangle in figure \ref{fig: gps_seq} encloses the roads we choose, and this is because \textit{OSM} can only export a rectangular region. Figure \ref{fig: roadmap} provides a closer look of these roads.
 
 \begin{figure}[htb]
   \centering
@@ -110,7 +110,7 @@ As mentioned in section 2, there are mainly three types of spatial graph that ca
   \label{fig: roadmap}
 \end{figure}
 
-Having the boundary latitudes and longitudes, we can download the road network as a graph structure via Python. Figure \ref{fig: graph_before} offers the visualization of it. In short, the graph has 906 roads, 532 intersections and endpoints. However, this graph still contains plentiful tiny and redundant roads. This is mainly caused by the intersections. To be specific, a road will be cut as two roads whenever there is an intersection on it, especially for crossroads. A crossroad is represented by 12 intersection points in the graph, leading to numerous tiny roads that can be merged into main roads. There are also many other cases that needs simplification. We summarize them as the following.
+Having the boundary latitudes and longitudes, we can download the road network as a graph structure via Python. Figure \ref{fig: graph_before} offers the visualization of it. In short, the graph has 906 roads, 532 intersections and endpoints. However, this graph still contains plentiful tiny and redundant roads. This is mainly caused by the intersections\cite{grah_simplify}. To be specific, a road will be cut as two roads whenever there is an intersection on it, especially for crossroads. A crossroad is represented by 12 intersection points in the graph, leading to numerous tiny roads that can be merged into main roads. There are also many other cases that needs simplification. We summarize them as the following.
 
 \begin{figure}[htb]
   \centering
@@ -131,38 +131,44 @@ Having the boundary latitudes and longitudes, we can download the road network a
 \end{figure}
 
 \begin{enumerate}
-  \item \textbf{Redundant Roads Between Neighboring Intersections.} We have illustrated the reason in the paragraph above. To eliminate them, we merge the intersection points at crossroads.
+  \item \textbf{Redundant Roads Between Neighboring Intersections.} We have illustrated the reason in the paragraph above. To eliminate them, the simplest way is to merge the intersection points at crossroads.
   \item \textbf{Trailing Roads.} There are some roads not connected to the main road network at both ends. We decide to remove them since they take little effect in traffic.
   \item \textbf{Overpasses.} Overpass is a 3D structure that cannot be reflected in a 2D map. Therefore, the GPS points on overpasses are in a mess when plotting to map, and impossible to be matched on roads. They should be deleted and leaving only the underlying main roads.
   \item \textbf{Two-way Lanes.} Roads are bidirectional, which is faithfully reflected in the graph. However, it will cause a problem that the two lanes of a road do not share the same endpoints. For convenience, we combine them, and manually reverse the road for its bi-directionality.
 \end{enumerate}
 
+A visualization of these four cases is provided by figure \ref{fig: simplification}. To handle them, we use \textit{QGIS}\footnote{\href{https://qgis.org/en/site/}{https://qgis.org/en/site/}} as a tool to redraw the graph by ourselves. \textit{QGIS} functions as geographic information system (GIS) software, allowing users to analyze and edit spatial information, in addition to composing and exporting graphical maps. Figure \ref{fig: graph_after} shows the road network graph after simplification where the four cases are eliminated thoroughly.
+
 \begin{figure}[htb]
   \centering
   \caption{Four simplification cases.}
   \label{fig: simplification}
-  \begin{subfigure}[t]{0.45\linewidth}
+  \begin{subfigure}[t]{0.22\linewidth}
       \centering
       \includegraphics[width=\textwidth]{images/crossroad.png}
       \caption{Redundant Roads}
       \label{fig: redundant_roads}
   \end{subfigure}
-  \begin{subfigure}[t]{0.45\linewidth}
+  \begin{subfigure}[t]{0.22\linewidth}
       \centering
       \includegraphics[width=\textwidth]{images/trailing_road.png}
       \caption{Trailing Roads}
       \label{fig: trailing_road}
   \end{subfigure}
-  \begin{subfigure}[t]{0.45\linewidth}
+  \begin{subfigure}[t]{0.22\linewidth}
     \centering
     \includegraphics[width=\textwidth]{images/overpass.png}
     \caption{Overpass}
     \label{fig: overpass}
   \end{subfigure}
-  \begin{subfigure}[t]{0.45\linewidth}
+  \begin{subfigure}[t]{0.22\linewidth}
     \centering
     \includegraphics[width=\textwidth]{images/two-way.png}
     \caption{Two-way Lanes}
     \label{fig: two-way}
   \end{subfigure}
 \end{figure}
+
+\subsection{Map Matching}
+
+\subsection{Data Interpolation}
