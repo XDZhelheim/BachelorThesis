@@ -1,6 +1,16 @@
 
 \section{Preliminaries}
-In this section, we will introduce the notations used in this paper and problem definitions in our task. Finally, we give an overview of our whole work.
+In this section, we first give an overview of our whole work. And we will introduce the notations used in this paper and problem definitions in our task.
+
+\subsection{Overview}
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=\textwidth]{images/overview.drawio.png}
+    \caption{An overview of our work.}
+    \label{fig: overview}
+\end{figure}
+
+Figure \ref{fig: overview} provides an overview of this paper, the details of each part will be stated in the following sections. Section 4 introduces how we build the dataset. The adopted methodology and model structure will be given in section 5. In section 6, the proposed model is verified by our dataset, and the experiment results demonstrate its practicability. A brief conclusion and several potential directions are provided in the last section.
 
 \subsection{Notations}
 \begin{table}[htb]
@@ -63,12 +73,3 @@ This section gives the definitions\cite{AAAI21} of the concepts and tasks occurr
         \hat X_{:, t+1:t+\tau_{out}}=f_\Theta(X_{:, t-\tau_{in}+1:t-1})=\mathop{\arg\max}_{X_{:, t+1:t+\tau_{out}}} p(X_{:, t+1:t+\tau_{out}}|X_{:, t-\tau_{in}+1:t-1})
     \end{equation}
 \end{problem}
-
-\subsection{Overview}
-\begin{figure}[htb]
-    \centering
-    \includegraphics[width=\textwidth]{images/overview.drawio.png}
-    \caption{An overview of our work.}
-    \label{fig: overview}
-\end{figure}
-  
