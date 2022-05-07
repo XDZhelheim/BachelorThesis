@@ -50,7 +50,7 @@ Figure \ref{fig: overview} provides an overview of this paper, the details of ea
 The above table \ref{notation_table} gives the notations and their definitions.
 
 \subsection{Problem Definition}
-This section gives the definitions\cite{AAAI21} of the concepts and tasks occurred in this paper.
+This section gives the definitions\cite{AAAI21} of the concepts and tasks occurr in this paper.
 \begin{definition}[Road Network Graph]
     The road network can be represented by a directed graph $\mathcal{G}=(\mathcal{R}, \mathcal{E}, A)$, where $\mathcal{R}=\{r_1, r_2, \dots, r_{n_r}\}$ is a finite set of roads that each $r_i$ stands for a real road in the road network. $\mathcal{E}$ is the set of directed edges where $(r_i, r_j)\in \mathcal{E}$ indicates that there is a directed edge from $r_i$ to $r_j$, i.e. $r_j$ is the downstream road in the road network. $A \in [0, 1]^{n_r\times n_r}$ is the adjacency matrix whose entry $A_{ij}$ is a binary value that indicates whether there exists an edge $(r_i, r_j)\in\mathcal{E}$.
 \end{definition}
@@ -62,6 +62,13 @@ This section gives the definitions\cite{AAAI21} of the concepts and tasks occurr
 \begin{definition}[Traffic State]
     Traffic state stands for the traffic flow or speed of a road during a particular time interval. Traffic flow is defined as the number of vehicles passing by the road, and traffic speed is the average speed of these vehicles. For a road graph $\mathcal{G}=(\mathcal{R}, \mathcal{E}, A)$, we use $X\in\RR^{n_r\times n_t}$ to record the traffic state of each time interval. For time interval $t$, $\mathbf{x}_t=X_{:, t}\in\RR^{n_r}$ represents the traffic state of all roads during $t$.
 \end{definition}
+
+\begin{problem}[Next-hop Prediction]
+    Given a road network graph $\mathcal{G}=(\mathcal{R}, \mathcal{E}, A)$ and the roads in a trajectory $T^r=\{r_1, r_2, \dots, r_l \}$ with length $l$, the trajectory next-hop prediction is to obtain a probability distribution $\hat P$ on road set $\mathcal{R}$ that best predicts the next step $r_{l+1}$. In conclusion, our goal is to build a model with parameters $\Theta$ that satisfies
+    \begin{equation}
+        \Theta=\mathop{\arg\min}_\Theta CrossEntropyLoss(\hat P, P)
+    \end{equation}
+\end{problem}
 
 \begin{problem}[Road Correlation]
     Given a road network graph $\mathcal{G}=(\mathcal{R}, \mathcal{E}, A)$, find a road correlation function $Cor$ which takes two roads as input and returns a real number $0\leqslant Cor(r_i, r_j)\leqslant 1$ to quantify the spatial dependency between two roads $r_i$ and $r_j$. The value is bigger if the two roads have a stronger dependency, e.g. $r_i$ is the only way to $r_j$. The road correlation matrix $C$ stores all the correlation values s.t. $C_{ij}=Cor(r_i, r_j)$.

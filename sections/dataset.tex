@@ -107,7 +107,7 @@ Figure \ref{fig: gps_seq} shows that the GPS points are accurately moving along 
 As mentioned in section 2, there are mainly three types of spatial graph that categorized by its vertices, which is grid, sensor or road. For a road network graph, a vertex represents a road and an edge stands for the connectivity between two roads. The formal definition has been given in section 3.3. In short, we need to acquire real road map and construct the graph depending on it.
 
 OpenStreetMap (OSM)\cite{osm} is a collaborative project to create a free editable geographic database of the world. It is easy to download a map and create a road network graph by OSM's official website\footnote{\href{https://www.openstreetmap.org/}{https://www.openstreetmap.org/}} as well as its Python API. Our data covers the taxi tracks over the whole Shenzhen city, however, it is impractical to construct the complete road network due to its huge complexity. As a result, we decide to choose a small region of central business district (CBD) in Futian since it is in one of the most heavy-traffic areas. The red rectangle in figure \ref{fig: gps_seq} encloses the roads we choose, and this is because OSM can only export a rectangular region. Figure \ref{fig: roadmap} provides a closer look of these roads.
-\clearpage %! figure position
+% \clearpage %! figure position
 \begin{figure}[htb]
   \centering
   \includegraphics[width=\textwidth]{images/roadmap.png}
