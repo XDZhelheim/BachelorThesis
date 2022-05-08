@@ -198,7 +198,7 @@ Map matching\cite{mm} is a procedure to match a location, in this paper, a \text
   \end{center}
 \end{table}
 
-Table \ref{fmm_table} provides the tuned parameters we apply on map matching, and the description of them are taken from FMM's official document. As a result, we achieved $100\%$ matched percentage. After FMM, we get the matched trajectories. To limit their length, we split a trajectory if GPS reading is off for over 10 minutes. Finally, we get the trajectory set $\mathcal{T}$.
+Table \ref{fmm_table} provides the tuned parameters we apply on map matching, and the description of them are taken from FMM's official document. As a result, we achieved $100\%$ matched percentage. After FMM, we get the matched trajectories. To limit their length, we split a trajectory if GPS reading is off for over 10 minutes. Finally, the trajectory set $\mathcal{T}$ is generated.
 
 \subsection{Data Interpolation}
 In the data cleaning stage, we removed $70\%$ rows in the June $1^{st}$ example. Although most of them are duplicated, there are still some records that can be taken use of, which is related to the four cases of zero speed records that we mentioned in section 4.2. In addition, due to the low and unstable sampling rate of the GPS devices, \textbf{discontinuities} are prevalent in the trajectories. Here we give a detailed explanation of their causes and countermeasures.
@@ -215,7 +215,7 @@ In the data cleaning stage, we removed $70\%$ rows in the June $1^{st}$ example.
 
 \vspace{\baselineskip}
 
-\textbf{Discontinuities in trajectories.} We illustrate this problem with an example in figure \ref{fig: traj_interpolate}. The three red points are from raw data, after map matching, we get a trajectory $[r_1, r_3, r_4]$. However, owing to the topology of the road network graph, the vehicle must pass $r_2$ and $r_3$. For some reason like the low recording frequency of the GPS device, the points on $r_2$ and $r_3$ are not recorded. Fortunately, FMM is able to interpolate the missing points and output a trajectory $[r_1, r_2, r_3, r_4, r_5]$. Trajectory interpolation is \textbf{essential} because the dataset will have a very, very bad performance on traffic prediction models without it.
+\textbf{Discontinuities in trajectories.} We illustrate this problem with an example in figure \ref{fig: traj_interpolate}. The three red points are from raw data, after map matching, we get a trajectory $[r_1, r_3, r_4]$. However, owing to the topology of the road network graph, the vehicle must pass $r_2$ and $r_3$. For some reason like the low recording frequency of the GPS device, the points on $r_2$ and $r_3$ are not recorded. To deal with it, we take use of an FMM's built-in function that is able to interpolate the missing points and output the trajectory $[r_1, r_2, r_3, r_4, r_5]$. Trajectory interpolation is \textbf{essential} because the dataset will have a very, very bad performance on traffic prediction models without it.
 
 \begin{figure}[htb]
   \centering
@@ -225,4 +225,4 @@ In the data cleaning stage, we removed $70\%$ rows in the June $1^{st}$ example.
 \end{figure}
 
 \subsection{Road Traffic States}
-The last step is to count the traffic states of each road. Having a trajectory as a $(r, s, ts)$ sequence, the traffic flow of $r$ at the corresponding time interval will be increased. And the length of each time interval is 5 minutes in our work. For instance, if there is a tuple $(r_1, 40, 12:03)$, then the flow of $r_1$ at interval $12:00 - 12:05$ is increased by $1$. The traffic speed of $r_1$ is the sum of all related tuples' speed divided by its flow. If no vehicle pass by in a time interval, we assume the speed is the average of all other time intervals. As a result, we derived the traffic state matrix $X$ for flow and speed, and both of them have size $(n_r, n_t)$.
+The last step is to count the traffic states of each road. Having a trajectory as a $(r, s, ts)$ sequence, the traffic flow of $r$ at the corresponding time interval will be increased. And the length of each time interval is 5 minutes in our work. For instance, if there is a tuple $(r_1, 40, 12:03)$, then the flow of $r_1$ at interval $12:00 - 12:05$ is increased by $1$. The traffic speed of $r_1$ is the sum of all related tuples' speed divided by its flow. If no vehicle pass by in a time interval, we assume its traffic speed is the average of all other time intervals. As a result, we collect the traffic flow and speed of all roads into traffic state matrix $X$, and both of $X_{flow}$ and $X_{speed}$ have size $(n_r, n_t)$.
