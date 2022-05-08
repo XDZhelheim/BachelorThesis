@@ -38,6 +38,7 @@ Figure \ref{fig: overview} provides an overview of this paper, and the details o
             $E$               & road embedding matrix                     \\
             $\mathbf{e}_i$    & embedding vector for road $r_i$           \\
             $d_r$             & dimension of embedding vectors            \\
+            $d_h$             & hidden size of LSTM                       \\
             $C$               & road correlation matrix                   \\
             $t$               & time interval                             \\
             $n_t$             & \#time intervals                          \\
@@ -48,12 +49,12 @@ Figure \ref{fig: overview} provides an overview of this paper, and the details o
         \end{tabular}
     \end{center}
 \end{table}
-The above table \ref{notation_table} gives the notations and their definitions.
+Table \ref{notation_table} gives the notations and their definitions.
 
 \subsection{Problem Definition}
-This section gives the definitions\cite{AAAI21} of the concepts and tasks occur in this paper.
+This subsection gives the definitions\cite{AAAI21} of the concepts and tasks occur in this paper.
 \begin{definition}[Road Network Graph]
-    The road network can be represented by a directed graph $\mathcal{G}=(\mathcal{R}, \mathcal{E}, A)$, where $\mathcal{R}=\{r_1, r_2, \dots, r_{n_r}\}$ is a finite set of roads that each $r_i$ stands for a real road in the road network. $\mathcal{E}$ is the set of directed edges where $(r_i, r_j)\in \mathcal{E}$ indicates that there is a directed edge from $r_i$ to $r_j$, i.e. $r_j$ is the downstream road in the road network. $A \in [0, 1]^{n_r\times n_r}$ is the adjacency matrix whose entry $A_{ij}$ is a binary value that indicates whether there exists an edge $(r_i, r_j)\in\mathcal{E}$.
+    The road network can be represented by a directed graph $\mathcal{G}=(\mathcal{R}, \mathcal{E}, A)$, where $\mathcal{R}=\{r_1, r_2, \dots, r_{n_r}\}$ is a finite set of roads that each $r_i$ is an integer ID for a real road in the road network. $\mathcal{E}$ is the set of directed edges where $(r_i, r_j)\in \mathcal{E}$ indicates that there is a directed edge from $r_i$ to $r_j$, i.e. $r_j$ is the downstream road in the road network. $A \in [0, 1]^{n_r\times n_r}$ is the adjacency matrix whose entry $A_{ij}$ is a binary value that indicates whether there exists an edge $(r_i, r_j)\in\mathcal{E}$.
 \end{definition}
 
 \begin{definition}[Trajectory]
@@ -65,7 +66,7 @@ This section gives the definitions\cite{AAAI21} of the concepts and tasks occur 
 \end{definition}
 
 \begin{problem}[Next-hop Prediction]
-    Given a road network graph $\mathcal{G}=(\mathcal{R}, \mathcal{E}, A)$ and the roads in a trajectory $T^r=\{r_1, r_2, \dots, r_l \}$ with length $l$, the trajectory next-hop prediction is to obtain a probability distribution $\hat P$ on road set $\mathcal{R}$ that best predicts the next step $r_{l+1}$. In conclusion, our goal is to build a model with parameters $\Theta$ that satisfies
+    Given a road network graph $\mathcal{G}=(\mathcal{R}, \mathcal{E}, A)$ and the road sequence in a trajectory $T^r=\{r_1, r_2, \dots, r_l \}$ with length $l$, the trajectory next-hop prediction is to obtain a probability distribution $\hat P$ on road set $\mathcal{R}$ that best predicts the next step $r_{l+1}$. In conclusion, our goal is to build a model with parameters $\Theta$ that satisfies
     \begin{equation}
         \Theta=\mathop{\arg\min}_\Theta CrossEntropyLoss(\hat P, P)
     \end{equation}
@@ -76,8 +77,8 @@ This section gives the definitions\cite{AAAI21} of the concepts and tasks occur 
 \end{problem}
 
 \begin{problem}[Traffic State Prediction]
-    Given a road network graph $\mathcal{G}=(\mathcal{R}, \mathcal{E}, A)$, find a function $f$ and its parameter set $\Theta$ s.t. given historical traffic states $\{\mathbf{x}_{t-\tau_{in}+1}, \mathbf{x}_{t-\tau_{in}}, \dots, \mathbf{x}_t \}$ for an input window $\tau_{in}$, $f$ estimates the most likely traffic states $\{\mathbf{x}_{t+1}, \mathbf{x}_{t+2}, \dots, \mathbf{x}_{t+\tau_{out}} \}$ for an output window $\tau_{out}$.
+    Given a road network graph $\mathcal{G}=(\mathcal{R}, \mathcal{E}, A)$, find a function $f$ and its parameter set $\Theta$ s.t. given historical traffic states $\{\mathbf{x}_{t-w_{in}+1}, \mathbf{x}_{t-w_{in}}, \dots, \mathbf{x}_t \}$ for an input window $w_{in}$, $f$ estimates the most likely traffic states $\{\mathbf{x}_{t+1}, \mathbf{x}_{t+2}, \dots, \mathbf{x}_{t+w_{out}} \}$ for an output window $w_{out}$.
     \begin{equation}
-        \hat X_{:, t+1:t+\tau_{out}}=f_\Theta(X_{:, t-\tau_{in}+1:t-1})=\mathop{\arg\max}_{X_{:, t+1:t+\tau_{out}}} p(X_{:, t+1:t+\tau_{out}}|X_{:, t-\tau_{in}+1:t-1})
+        \hat X_{:, t+1:t+w_{out}}=f_\Theta(X_{:, t-w_{in}+1:t-1})=\mathop{\arg\max}_{X_{:, t+1:t+w_{out}}} p(X_{:, t+1:t+w_{out}}|X_{:, t-w_{in}+1:t-1})
     \end{equation}
 \end{problem}
