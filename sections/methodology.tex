@@ -1,8 +1,12 @@
 
 \section{Methodology}
-In this section, we will offer a detailed explanation on not only the modeling of road correlation, i.e. the derivation of road correlation matrix $C$, but also how to integrate it into traffic state prediction.
+In this section, we will provide a detailed explanation on not only the modeling of road correlation, i.e. the derivation of road correlation matrix $C$, but also how to integrate it into traffic state prediction.
 
-\subsection{Road Correlation Modeling}
+\subsection{Trajectory-based Road Correlation}
+As mentioned in section 1, traffic states in real world varies over time. The traffic states in peak hours will even be completely different from other time intervals. However, most GCN models view the road network as a changeless graph, thus, they use adjacency matrix $A$ to represent it. On the contrary, trajectories indicate the route of vehicles, i.e. the real choices made by driver, which will give us the concrete transfer processes among roads. By leveraging them, we target to extract the road correspondence information inside transition and use a number to represent it. A simple way is regarding it as a first-order Markov process\cite{AAAI21}, and calculate the Markov transition probability as road correlation value by iterating on all trajectories. But Markov process is short in modeling high-order transition, since the next step is only related to the previous one, by its definition. Therefore, instead of statistical methods that result in a fixed probability value, we take advantage of deep leaning to let the machine automatically learn the transition process and output the high-order dependencies. To be specific, our idea is to build a trajectory next-hop prediction model and dynamically learn a vector representation of each road. Then compute vector similarity as road correlation.
 
+\vspace{\baselineskip}
 
-\subsection{Traffic State Prediction}
+\textbf{Road Embedding.} 
+
+\subsection{Improving Traffic State Prediction}
