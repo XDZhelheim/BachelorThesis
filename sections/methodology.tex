@@ -23,10 +23,28 @@ In our work, a trajectory contains a sequence of different road IDs, which is si
 
 \vspace{\baselineskip}
 
-\textbf{Next-hop Prediction Model}. To learn the embedding vectors, we propose a simple LSTM\cite{LSTM}-based model to predict the next-hop of a trajectory. Firstly, to utilize the trajectories, we use a sliding window strategy to generate training samples. After extracting the road sequence as $T^r=\{r_1, r_2, \dots, r_l \}$, we can obtain $l-w$ fragments by sliding a window with size $w$. A fragment is denoted as $\{r_1, r_2, \dots, r_w\}$, as well as its corresponding next-hop $r_{w+1}$. Next, we feed the fragments into an embedding layer that uses an embedding matrix $E\in\RR^{N\times d_r}$ to map each road ID to a vector of continuous values, where $N$ is the number of roads and $d_r$ is the embedding dimension. The second layer is an LSTM-RNN to capture dependencies in the sequence. LSTM encodes the embedded fragment into a single hidden vector with dimension $d_h$ after $w$ steps' iteration. The last layer is a fully connected linear layer that converts the hidden vector to an output length-$N$ vector for classification. Then the \textit{Softmax} function to generate the probability distribution. Cross entropy is served as the loss function. After training, we take out the embedding matrix $E$ in the embedding layer and calculate the \textbf{road correlation matrix} as
+\textbf{Next-hop Prediction Model}. To learn the embedding vectors, we propose a simple LSTM\cite{LSTM}-based model to predict the next-hop of a trajectory. Firstly, to utilize the trajectories, we use a sliding window strategy to generate training samples. After extracting the road sequence as $T^r=\{r_1, r_2, \dots, r_l \}$, we can obtain $l-w$ fragments by sliding a window with size $w$. A fragment is denoted as $\{r_1, r_2, \dots, r_w\}$, as well as its corresponding next-hop $r_{w+1}$. Next, we feed the fragments into an embedding layer that uses an embedding matrix $E\in\RR^{N\times d_r}$ to map each road ID to a vector of continuous values, where $N$ is the number of roads and $d_r$ is the embedding dimension. The second layer is an LSTM-RNN to capture dependencies in the sequence. LSTM encodes the embedded fragment into a single hidden vector with dimension $d_h$ after $w$ steps' iteration. The last layer is a fully connected linear layer that converts the hidden vector to an output length-$N$ vector for classification. Then the \textit{Softmax} function to generate the probability distribution. Cross entropy is served as the loss function. The procedure of forward propagation is given in the following equations.
+\begin{equation}
+    \begin{aligned}
+        \mathbf{e}&=\mathrm{Embedding}(r)\\
+        \mathbf{h}&=\mathrm{LSTM}(\mathbf{e})\\
+        \mathbf{o}&=W^T\mathbf{h}+b\\
+        \hat P&=Softmax(\mathbf{o})\\
+        \mathcal{L}&=CrossEntropy(\hat P, P)
+    \end{aligned}
+\end{equation}
+
+After training, we take out the embedding matrix $E$ in the embedding layer and calculate the \textbf{road correlation matrix} as
 \begin{equation}
     C=E\cdot E^T
 \end{equation}
-where $C_{ij}=\mathbf{e_i}\cdot \mathbf{e_j}=Cor(r_i, r_j)$.
+where $C[i, j]=\mathbf{e_i}\cdot \mathbf{e_j}=Cor(r_i, r_j)$.
 
 \subsection{Improving Traffic State Prediction}
+Most state-of-the-art GCN models for traffic prediction take two inputs. One is traffic states, which is $X$ in our work. The other is graph adjacency matrix $A$. Instead of making a new model, we decide to integrate road correlation matrix $C$ into the existing models to give them the correlation knowledge which will benefit in prediction. A naive thought is to replace adjacency matrix by road correlation matrix since they have the same shape $n_r\times n_r$. However, practice proves that this does not work well, and binary relations are still necessary. Therefore, we proposed a procedure to refine the adjacency matrix by the idea of $k$-nearest neighbors ($k$-NN)\cite{knn}. In detail, the semantic distance among roads can be represented by the distance of their embedding vectors, which is negatively related to the similarity, i.e. $distance(r_1, r_2)=-Cor(r_1, r_2)$. Therefore, finding the $k$ nearest neighbors of a road $r_i$ is equal to find the $k$ biggest correlation values' indices in the $i$-th row of road correlation matrix $C$. The refined adjacency matrix $A'$ will be determined as
+\begin{equation}
+    A'[i, j]=\mathbb{I}(r_j\in k\mathrm{-NN}(r_i))=\mathbb{I}(j\in \mathrm{argsort}(C_i)[{:}k])
+\end{equation}
+where $\mathbb{I}$ stands for the indicator function and $C_i$ is the $i$-th row of the correlation matrix. The order of $\mathrm{argsort}$ function is descending.
+
+By replacing $A$ with $A'$, we improve the accuracy of traffic prediction models. The details of empirical verification is given in the next section.
