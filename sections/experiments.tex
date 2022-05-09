@@ -5,7 +5,7 @@ In this section, the details of training road embeddings by the next-hop predict
 \subsection{Settings}
 Our experiments were performed on a sever equipped with Intel(R) Xeon(R) Silver 4216 CPU @ 2.10GHz and an NVIDIA GeForce RTX 2080Ti graphics card. The PyTorch version is 1.7.1 with Python 3.7.11.
 
-For the next-hop prediction model, the window size for trajectory fragments generation was set as $w=5$. After data processing, we got 1,751,602 trajectories in total. Removing too long and too short ones, there were 1,351,700 remaining. Then we put the trajectories into 24 bins according to their starting time and randomly sampled $p=80\%$ data in each bin to combine as the whole dataset. Finally, there were 1,076,886 trajectories. The data ratio for training, validation, and testing was set as 7:1:2. After window sliding, we got 10,228,578 trajectory fragments for training, and 1,455,100 for validation. Adam algorithm was employed to control the overall training process, and the loss function was Cross Entropy Loss. The complete parameter selection is given in table \ref{next-hop_params}.
+For the next-hop prediction model, the window size for trajectory fragments generation was set as $w=5$. After data processing, we got 1,751,602 trajectories in total. Removing too long and too short ones, there were 1,351,700 remaining. Then we put the trajectories into 24 bins according to their starting time and randomly sampled $p=80\%$ data in each bin to combine as the whole dataset. Finally, there were 1,076,886 trajectories. The data ratio for training, validation, and testing was set as 7:1:2. After window sliding, we got 10,228,578 trajectory fragments for training, and 1,455,100 for validation. Adam algorithm was employed to control the overall training process, and the loss function was \textit{Cross Entropy Loss}. The complete parameter selection is given in table \ref{next-hop_params}.
 
 \begin{table}[htb]
     \begin{center}
@@ -26,6 +26,31 @@ For the next-hop prediction model, the window size for trajectory fragments gene
             ~ & Batch size & $\{64, 128, 256, 512 \}$ & $256$\\
             ~ & Learning rate & $\{0.0001, 0.001\}$ & $0.0001$\\
             ~ & Early stopping epochs & $\{5, 10, 15\}$ & $10$\\
+  
+            \bottomrule
+        \end{tabular}
+    \end{center}
+\end{table}
+
+For traffic state prediction model, the input steps and prediction steps were both set to 12. The size of traffic state matrix is $n_r\times n_t=492\times 8064$. The data split ratio was also 7:1:2, and after sampling, we got 6437 traffic state vectors for training. The optimizer was Adam where the learning rate was set as 0.001, and the loss function was \textit{Mean Squared Error (MSE) Loss}. Batch size was set to 32 in order to avoid the \textit{CUDA Out of Memory} exception. Similarly, the training process would be early-stopped if the validation loss was not decreasing for 10 epochs, then the best model on validation data would be saved. Details are provided in table \ref{traff_pred_params}.
+
+\begin{table}[htb]
+    \begin{center}
+        \caption{Parameters for traffic state prediction.}
+        \label{traff_pred_params}
+        \begin{tabular}{cll}
+            \toprule
+  
+            \textbf{Notation} & \textbf{Parameter} & \textbf{Value}\\
+  
+            \midrule
+  
+            $w_{in}$ & Input steps & $12$\\
+            $w_{out}$ & Prediction steps & $12$\\
+            ~ & Batch size & $32$\\
+            ~ & Learning rate & $0.001$\\
+            ~ & Early stopping epochs & $10$\\
+            ~ & Max training epochs & $200$\\
   
             \bottomrule
         \end{tabular}
