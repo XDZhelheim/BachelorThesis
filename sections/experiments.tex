@@ -65,24 +65,21 @@ We selected two baseline traffic prediction models that can effectively capture 
     \item \textbf{DCRNN}\cite{DCRNN} (Diffusion Convolutional Recurrent Neural Network). DCRNN is another typical GCN model that is also proposed in 2018. Instead of spectral graph convolution, it implements diffusion convolution through bidirectional random walk to capture the transition information. Temporally, it integrates diffusion convolution into GRU and proposed an encoder-decoder structure to enable multistep prediction.
 \end{itemize}
 
-We set the input graph as (1) adjacency matrix $A$, (2) refined adjacency matrix $A'$ to compare their performance and illustrate the effect of road correlation in traffic state prediction. The corresponding models are denoted as STGCN-$A$, STGCN-$A'$, DCRNN-$A$ and DCRNN-$A'$.
+We set the input graph as (1) adjacency matrix $A$, (2) \textit{refined adjacency matrix} $A'$ to compare their performance and illustrate the effect of road correlation in traffic state prediction. The corresponding models are denoted as STGCN-$A$, STGCN-$A'$, DCRNN-$A$ and DCRNN-$A'$.
 
 \subsection{Evaluation Metrics}
 Following previous studies, we use \textit{Root Mean Square Error (RMSE)}, \textit{Mean Absolute Error (MAE)}, and \textit{Mean Absolute Percentage Error (MAPE)} as the metrics to show performance of different methods. Zero values will be ignored, and lower errors indicate better performance. The definition of them are as following.
 
 \begin{equation}
-    MAE=\frac 1n\sum_{i=1}^n|\hat{y_i}-y_i|
-\end{equation}
-
-\begin{equation}
-    MAPE=\frac 1n\sum_{i=1}^n|\frac{\hat{y_i}-y_i}{y_i}|
-\end{equation}
-
-\begin{equation}
-    RMSE=\sqrt{\frac 1n\sum_{i=1}^n(\hat{y_i}-y_i)^2}
+    \begin{aligned}
+        MAE&=\frac 1n\sum_{i=1}^n|\hat{y_i}-y_i|\\
+        MAPE&=\frac 1n\sum_{i=1}^n|\frac{\hat{y_i}-y_i}{y_i}|\\
+        RMSE&=\sqrt{\frac 1n\sum_{i=1}^n(\hat{y_i}-y_i)^2}
+    \end{aligned}
 \end{equation}
 
 \subsection{Overall Performance}
+First we introduce the performance of next-hop prediction. We tried tens of parameter combinations and finally reached $5.47$ validation loss and $73.01\%$ prediction accuracy. The embedding matrix $E$ in the model was saved for the computation of \textit{refined adjacency matrix} $A'$. Then the comparison of the four models' performance are given in table \ref{performance_results}. To demonstrate how the prediction accuracy varies with time, we report the metrics for 15, 30, 60-minutes ahead prediction. From the table, we obtain the following observations:
 
 \begin{table}[htb]
     \renewcommand\arraystretch{1.5} % 1.5 line space
@@ -116,6 +113,10 @@ Following previous studies, we use \textit{Root Mean Square Error (RMSE)}, \text
         }
     \end{center}
 \end{table}
+
+\begin{itemize}
+    \item 
+\end{itemize}
 
 \subsection{Parameter Study}
 embedding 模型的调参图
