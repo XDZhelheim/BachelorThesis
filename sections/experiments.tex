@@ -1,8 +1,11 @@
 
 \section{Experiments}
+In this section, the details of training road embeddings by the next-hop prediction model will be given. And we will explain the process of parameter tuning. A verification for the functionality of road correlation, as well as an analysis and visualization are also stated in this section.
 
 \subsection{Settings}
-这里放实验环境
+Our experiments are performed on a sever equipped with Intel(R) Xeon(R) Silver 4216 CPU @ 2.10GHz and an NVIDIA GeForce RTX 2080Ti graphic card. The PyTorch version is 1.7.1 with Python 3.7.11.
+
+For the next-hop prediction model, the window size for trajectory fragments generation is set as $w=5$. After data processing, we get 1,751,602 trajectories in total. Removing too long and too short ones, there are 1,351,700 remaining. Then we put the trajectories into 24 bins according to their starting time and equally sample 80\% data in each bin to combine as the whole dataset. Finally, there are 1,076,886 trajectories. The data ratio for training, validation, and testing is set as 7:1:2. After window sliding, we get 10,228,578 trajectory fragments for training, and 1,455,100 for validation. Adam was set as the default optimizer, and the loss function is Cross Entropy Loss. The complete parameter selection is given in table
 
 \subsection{Baseline Models}
 介绍用到的俩模型 STGCN DCRNN
