@@ -3,9 +3,9 @@
 In this section, the details of training road embeddings by the next-hop prediction model will be given. And we will explain the process of parameter tuning. A verification for the functionality of road correlation, as well as an analysis and visualization are also stated in this section.
 
 \subsection{Settings}
-Our experiments were performed on a sever equipped with Intel(R) Xeon(R) Silver 4216 CPU @ 2.10GHz and an NVIDIA GeForce RTX 2080Ti graphics card. The PyTorch version is 1.7.1 with Python 3.7.11.
+Our experiments were performed on a sever equipped with Intel(R) Xeon(R) Silver 4216 CPU @ 2.10GHz and an NVIDIA GeForce RTX 2080Ti graphics card. The PyTorch\cite{pytorch} version is 1.7.1 with Python 3.7.11.
 
-For the next-hop prediction model, the window size for trajectory fragments generation was set as $w=5$. After data processing, we got 1,751,602 trajectories in total. Removing too long and too short ones, there were 1,351,700 remaining. Then we put the trajectories into 24 bins according to their starting time and randomly sampled $p=80\%$ data in each bin to combine as the whole dataset. Finally, there were 1,076,886 trajectories. The data ratio for training, validation, and testing was set as 7:1:2. After window sliding, we got 10,228,578 trajectory fragments for training, and 1,455,100 for validation. Adam algorithm was employed to control the overall training process, and the loss function was \textit{Cross Entropy Loss}. The complete parameter selection is given in table \ref{next-hop_params}.
+For the next-hop prediction model, the window size for trajectory fragments generation was set as $w=5$. After data processing, we got 1,751,602 trajectories in total. Removing too long and too short ones, there were 1,351,700 remaining. Then we put the trajectories into 24 bins according to their starting time and randomly sampled $p=80\%$ data in each bin to combine as the whole dataset. Finally, there were 1,076,886 trajectories. The data ratio for training, validation, and testing was set as 7:1:2. After window sliding, we got 10,228,578 trajectory fragments for training, and 1,455,100 for validation. Adam\cite{adam} algorithm was employed to control the overall training process, and the loss function was \textit{Cross Entropy Loss}. The complete parameter selection is given in table \ref{next-hop_params}.
 
 \begin{table}[htb]
     \begin{center}
@@ -58,7 +58,11 @@ For traffic state prediction model, the input steps and prediction steps were bo
 \end{table}
 
 \subsection{Baseline Models}
-介绍用到的俩模型 STGCN DCRNN
+We selected two baseline traffic prediction models that can effectively capture the spatial dependencies in the graph. We set their input as (1) adjacency matrix $A$, (2) refined adjacency matrix $A'$ to compare their performance and illustrate the effect of road correlation in traffic state prediction.
+
+\begin{itemize}
+    \item \textbf{STGCN}\cite{STGCN} (Spatio-Temporal Graph Convolutional Networks). 
+\end{itemize}
 
 \subsection{Evaluation Metrics}
 MAE, RMSE, MAPE 公式
