@@ -3,9 +3,34 @@
 In this section, the details of training road embeddings by the next-hop prediction model will be given. And we will explain the process of parameter tuning. A verification for the functionality of road correlation, as well as an analysis and visualization are also stated in this section.
 
 \subsection{Settings}
-Our experiments are performed on a sever equipped with Intel(R) Xeon(R) Silver 4216 CPU @ 2.10GHz and an NVIDIA GeForce RTX 2080Ti graphic card. The PyTorch version is 1.7.1 with Python 3.7.11.
+Our experiments were performed on a sever equipped with Intel(R) Xeon(R) Silver 4216 CPU @ 2.10GHz and an NVIDIA GeForce RTX 2080Ti graphics card. The PyTorch version is 1.7.1 with Python 3.7.11.
 
-For the next-hop prediction model, the window size for trajectory fragments generation is set as $w=5$. After data processing, we get 1,751,602 trajectories in total. Removing too long and too short ones, there are 1,351,700 remaining. Then we put the trajectories into 24 bins according to their starting time and equally sample 80\% data in each bin to combine as the whole dataset. Finally, there are 1,076,886 trajectories. The data ratio for training, validation, and testing is set as 7:1:2. After window sliding, we get 10,228,578 trajectory fragments for training, and 1,455,100 for validation. Adam was set as the default optimizer, and the loss function is Cross Entropy Loss. The complete parameter selection is given in table
+For the next-hop prediction model, the window size for trajectory fragments generation was set as $w=5$. After data processing, we got 1,751,602 trajectories in total. Removing too long and too short ones, there were 1,351,700 remaining. Then we put the trajectories into 24 bins according to their starting time and randomly sampled $p=80\%$ data in each bin to combine as the whole dataset. Finally, there were 1,076,886 trajectories. The data ratio for training, validation, and testing was set as 7:1:2. After window sliding, we got 10,228,578 trajectory fragments for training, and 1,455,100 for validation. Adam algorithm was employed to control the overall training process, and the loss function was Cross Entropy Loss. The complete parameter selection is given in table \ref{next-hop_params}.
+
+\begin{table}[htb]
+    \begin{center}
+        \caption{Tuned parameters for next-hop prediction.}
+        \label{next-hop_params}
+        \begin{tabular}{clll}
+            \toprule
+  
+            \textbf{Notation} & \textbf{Parameter} & \textbf{Search Space} & \textbf{Selected Value}\\
+  
+            \midrule
+  
+            $w$ & Window size & $\{5 \}$ & $5$\\
+            $p$ & Sampling proportion & $\{0.05, 0.1, 0.2, 0.4, 0.8\}$ & $0.8$\\
+            $d_r$ & Road embedding dimension & $\{16, 32, 64, 128 \}$ & $64$\\
+            $d_h$ & LSTM hidden size & $\{32, 64, 128, 256 \}$ & $256$\\
+            $d_o$ & Linear output dimension & $d_o=n_r=\#roads$ & $492$\\
+            ~ & Batch size & $\{64, 128, 256, 512 \}$ & $256$\\
+            ~ & Learning rate & $\{0.0001, 0.001\}$ & $0.0001$\\
+            ~ & Early stopping epochs & $\{5, 10, 15\}$ & $10$\\
+  
+            \bottomrule
+        \end{tabular}
+    \end{center}
+\end{table}
 
 \subsection{Baseline Models}
 介绍用到的俩模型 STGCN DCRNN

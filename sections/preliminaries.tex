@@ -24,7 +24,8 @@ Figure \ref{fig: overview} provides an overview of this paper, and the details o
 
             \midrule
 
-            $n_r$             & \#roads                                   \\
+            $n_{(\cdot)}$     & number of some entities                   \\
+            $d_{(\cdot)}$     & vector dimension                          \\
             $\mathcal R$      & road set                                  \\
             $r$               & a single road in $\mathcal R$             \\
             $\mathcal E$      & edge set                                  \\
@@ -35,13 +36,11 @@ Figure \ref{fig: overview} provides an overview of this paper, and the details o
             $ts$              & timestamp                                 \\
             $s$               & speed                                     \\
             $w$               & window size                               \\
+            $p$               & random sampling proportion                \\
             $E$               & road embedding matrix                     \\
             $\mathbf{e}_i$    & embedding vector for road $r_i$           \\
-            $d_r$             & dimension of embedding vectors            \\
-            $d_h$             & hidden size of LSTM                       \\
             $C$               & road correlation matrix                   \\
             $t$               & time interval                             \\
-            $n_t$             & \#time intervals                          \\
             $X$               & traffic state matrix                      \\
             $\mathbf x_t$     & traffic state vector at time interval $t$ \\
 
