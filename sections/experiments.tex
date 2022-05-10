@@ -65,7 +65,7 @@ We selected two baseline traffic prediction models that can effectively capture 
     \item \textbf{DCRNN}\cite{DCRNN} (Diffusion Convolutional Recurrent Neural Network). DCRNN is another typical GCN model that is also proposed in 2018. Instead of spectral graph convolution, it implements diffusion convolution through bidirectional random walk to capture the transition information. Temporally, it integrates diffusion convolution into GRU and proposed an encoder-decoder structure to enable multistep prediction.
 \end{itemize}
 
-We set the input graph as (1) adjacency matrix $A$, (2) \textit{refined adjacency matrix} $A'$ to compare their performance and illustrate the effect of road correlation in traffic state prediction. The corresponding models are denoted as STGCN-$A$, STGCN-$A'$, DCRNN-$A$ and DCRNN-$A'$.
+We set the input graph as (1) \textit{adjacency matrix} $A$, (2) \textit{refined adjacency matrix} $A'$ to compare their performance and illustrate the effect of road correlation in traffic state prediction. The corresponding models are denoted as STGCN-$A$, STGCN-$A'$, DCRNN-$A$ and DCRNN-$A'$. In addition, we kept the (3) \textit{road correlation matrix} $C$ as input to give an ablation experiment. They are denoted as STGCN-$C$ and DCRNN-$C$.
 
 \subsection{Evaluation Metrics}
 Following previous studies, we use \textit{Root Mean Square Error (RMSE)}, \textit{Mean Absolute Error (MAE)}, and \textit{Mean Absolute Percentage Error (MAPE)} as the metrics to show performance of different methods. Zero values will be ignored, and lower errors indicate better performance. The definition of them are as following.
@@ -79,7 +79,7 @@ Following previous studies, we use \textit{Root Mean Square Error (RMSE)}, \text
 \end{equation}
 
 \subsection{Overall Performance}
-First we introduce the performance of next-hop prediction. We tried tens of parameter combinations and finally reached $5.47$ validation loss and $73.01\%$ prediction accuracy. The embedding matrix $E$ in the model was saved for the computation of \textit{refined adjacency matrix} $A'$. Then the comparison of the four models' performance are given in table \ref{performance_results}. To demonstrate how the prediction accuracy varies with time, we report the metrics for 15, 30, 60-minutes ahead prediction. From the table, we obtain the following observations:
+First we introduce the performance of next-hop prediction. We tried tens of parameter combinations and finally reached $5.47$ test loss and $73.47\%$ prediction accuracy. The embedding matrix $E$ in the model was saved for the computation of \textit{refined adjacency matrix} $A'$. Then the comparison of the four models' performance are given in table \ref{performance_results}. To demonstrate how the prediction accuracy varies with time, we report the metrics for 15, 30, 60-minutes ahead prediction. From the table, we obtain the following observations:
 
 \begin{table}[htb]
     \renewcommand\arraystretch{1.5} % 1.5 line space
@@ -96,16 +96,20 @@ First we introduce the performance of next-hop prediction. We tried tens of para
 
                 \hline
 
-                \multirow{4}{*}{Flow} & STGCN-$A$ & $4.44$ & $3.46$ & $33.00\%$ & $4.64$ & $3.57$ & $33.64\%$ & $5.07$ & $3.88$ & $36.07\%$\\
-                ~ & STGCN-$A'$ & $4.43$ & $3.43$ & $32.52\%$ & $\mathbf{4.61}$ & $\mathbf{3.54}$ & $\mathbf{33.23}\%$ & $4.98$ & $3.78$ & $35.31\%$\\
+                \multirow{6}{*}{Flow} & STGCN-$A$ & $4.44$ & $3.46$ & $33.00\%$ & $4.64$ & $3.57$ & $33.64\%$ & $5.07$ & $3.88$ & $36.07\%$\\
+                ~ & STGCN-$C$ & $4.38$ & $3.40$ & $32.41\%$ & $\mathbf{4.56}$ & $\mathbf{3.52}$ & $33.33\%$ & $5.03$ & $3.82$ & $35.87\%$\\
+                ~ & STGCN-$A'$ & $4.43$ & $3.43$ & $32.52\%$ & $4.59$ & $3.53$ & $\mathbf{33.23}\%$ & $4.98$ & $3.78$ & $35.31\%$\\
                 ~ & DCRNN-$A$ & $4.47$ & $3.46$ & $33.01\%$ & $4.66$ & $3.60$ & $34.06\%$ & $5.03$ & $3.85$ & $35.76\%$\\
+                ~ & DCRNN-$C$ & $8.19$ & $6.13$ & $55.66\%$ & $8.18$ & $6.13$ & $55.64\%$ & $8.13$ & $6.09$ & $55.33\%$\\
                 ~ & DCRNN-$A'$ & $\mathbf{4.23}$ & $\mathbf{3.28}$ & $\mathbf{31.46\%}$ & $4.63$ & $3.54$ & $33.60\%$ & $\mathbf{4.98}$ & $\mathbf{3.77}$ & $\mathbf{35.26\%}$\\
 
                 \hline
 
-                \multirow{4}{*}{Speed} & STGCN-$A$ & $6.60$ & $4.65$ & $23.67\%$ & $6.63$ & $4.66$ & $24.22\%$ & $6.71$ & $4.74$ & $24.01\%$\\
-                ~ & STGCN-$A'$ & $\mathbf{6.60}$ & $\mathbf{4.65}$ & $\mathbf{23.66\%}$ & $\mathbf{6.62}$ & $\mathbf{4.67}$ & $\mathbf{23.79\%}$ & $\mathbf{6.67}$ & $\mathbf{4.72}$ & $\mathbf{24.00\%}$\\
+                \multirow{6}{*}{Speed} & STGCN-$A$ & $6.60$ & $4.65$ & $23.67\%$ & $6.63$ & $4.66$ & $24.22\%$ & $6.71$ & $4.74$ & $24.01\%$\\
+                ~ & STGCN-$C$ & $6.62$ & $4.66$ & $23.87\%$ & $6.63$ & $4.69$ & $24.10\%$ & $6.67$ & $\mathbf{4.71}$ & $24.04\%$\\ 
+                ~ & STGCN-$A'$ & $\mathbf{6.60}$ & $\mathbf{4.65}$ & $\mathbf{23.66\%}$ & $\mathbf{6.62}$ & $\mathbf{4.67}$ & $\mathbf{23.79\%}$ & $\mathbf{6.67}$ & $4.72$ & $\mathbf{24.00\%}$\\
                 ~ & DCRNN-$A$ & $6.61$ & $4.65$ & $23.82\%$ & $6.65$ & $4.69$ & $24.00\%$ & $6.71$ & $4.76$ & $24.29\%$\\
+                ~ & DCRNN-$C$ & $8.41$ & $6.39$ & $30.90\%$ & $8.45$ & $6.42$ & $31.13\%$ & $8.46$ & $6.43$ & $31.18\%$\\
                 ~ & DCRNN-$A'$ & $6.62$ & $4.65$ & $23.82\%$ & $6.66$ & $4.68$ & $23.99\%$ & $6.71$ & $4.75$ & $24.25\%$\\
 
                 \bottomrule
