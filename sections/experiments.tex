@@ -68,7 +68,7 @@ We selected two baseline traffic prediction models that can effectively capture 
 We set the input graph as (1) \textit{adjacency matrix} $A$, (2) \textit{refined adjacency matrix} $A'$ to compare their performance and illustrate the effect of road correlation in traffic state prediction. The corresponding models are denoted as STGCN-$A$, STGCN-$A'$, DCRNN-$A$ and DCRNN-$A'$. In addition, we kept the (3) \textit{road correlation matrix} $C$ as input to give an ablation experiment. They are denoted as STGCN-$C$ and DCRNN-$C$.
 
 \subsection{Evaluation Metrics}
-Following previous studies, we use \textit{Root Mean Square Error (RMSE)}, \textit{Mean Absolute Error (MAE)}, and \textit{Mean Absolute Percentage Error (MAPE)} as the metrics to show performance of different methods. Zero values will be ignored, and lower errors indicate better performance. The definition of them are as following.
+Following previous studies, we use \textit{Root Mean Square Error (RMSE)}, \textit{Mean Absolute Error (MAE)}, and \textit{Mean Absolute Percentage Error (MAPE)} as the metrics to show the performance of different methods. Zero values will be ignored, and lower errors indicate better performance. The definition of them are as following.
 
 \begin{equation}
     \begin{aligned}
@@ -79,7 +79,7 @@ Following previous studies, we use \textit{Root Mean Square Error (RMSE)}, \text
 \end{equation}
 
 \subsection{Performance and Analysis}
-First, we introduce the performance of the next-hop prediction model. We tried tens of parameter combinations and finally reached $5.47$ on test loss and $73.47\%$ on prediction accuracy. The embedding matrix $E$ in the model was saved for the computation of \textit{refined adjacency matrix} $A'$. Then the comparison of the four models' performance are given in table \ref{performance_results}. To demonstrate how the prediction accuracy varies with time, we report the metrics for 15, 30, 60-minutes ahead prediction. From the table, we obtain the following observations:
+First, we introduce the performance of the next-hop prediction model. We tried tens of parameter combinations and finally reached $5.47$ on test loss and $73.47\%$ on prediction accuracy. The embedding matrix $E$ in the model was saved for the computation of \textit{refined adjacency matrix} $A'$. Then the comparison of the traffic state prediction models' performance are given in table \ref{performance_results}. To demonstrate how the prediction accuracy varies with time, we report the metrics for 15, 30, 60-minutes ahead prediction. From the table, we obtain the following observations:
 
 \begin{table}[htb]
     \renewcommand\arraystretch{1.5} % 1.5 line space
@@ -126,8 +126,62 @@ First, we introduce the performance of the next-hop prediction model. We tried t
 \end{itemize}
 
 \subsection{Parameter Study}
-embedding 模型的调参图
-knn 的调参图
+This section introduces parameter analysis to provide a closer insight into our models. At first, the parameter tuning process of the next-hop prediction model is given in figure \ref{fig: next-hop_param}, including the choices for road embedding dimension, LSTM hidden size and batch size. The parameter search candidates are given in the above table \ref{next-hop_params} in section 6.1. Actually, according to the table, tuning these three parameters needs to search $4^3=64$ combinations, and should be plotted in a 3-D chart. But for the convenience of drawing, we set other two parameters fixed when studying one of them. The figure shows the variation of the prediction accuracy on validation dataset with parameter values. From it, we observe that (1) the prediction accuracy is positively related to embedding dimension and LSTM hidden size, because they become more representative. (2) Batch size has no clearly positive or negative relation with accuracy, needing case-to-case analysis. (3) Large embedding dimension and LSTM hidden size combinations will lead to lower accuracy, which is not displayed in the figure. Nevertheless, it is still necessary to be emphasized. Finally, considering the overall performance and the ability of generalization, we choose the parameters shown in the orange rectangle with $73.01\%$ prediction accuracy.
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=\textwidth]{images/next-hop_param.png}
+    \caption{Parameter tuning for the next-hop prediction model.}
+    \label{fig: next-hop_param}
+\end{figure}
+
+\begin{figure}[htb]
+    \centering
+    \caption{Variation of STGCN-$A'$ prediction \textit{MAPE} with $k$.}
+    \label{fig: k}
+    \begin{subfigure}[t]{0.49\linewidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/k-flow.png}
+        \caption{Traffic flow prediction}
+        \label{fig: k-flow}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.49\linewidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/k-speed.png}
+        \caption{Traffic speed prediction}
+        \label{fig: k-speed}
+    \end{subfigure}
+\end{figure}
+Secondly, we analyze the choice of $k$ when calculating \textit{refined adjacency matrix} $A'$. As shown in figure \ref{fig: k}, the prediction \textit{MAPE} changes randomly with the increase of $k$ from $2$ to $20$. Because the value in $A'$ is either zero or one, a small change can lead to totally different results. There is no general rule for us to determine the value of $k$. Therefore, according to the figure, we choose different $k$ for each step's prediction, which are given in table \ref{k_table}.
+\begin{table}[htb]
+    \renewcommand\arraystretch{1.5} % 1.5 line space
+    \begin{center}
+        \caption{The choices of $k$ for $A'$ generation.}
+        \label{k_table}
+        \begin{tabular}{c|c|c|c}
+            \toprule
+  
+            \textbf{Model} & \textbf{Traffic State} & \textbf{Steps} & \textbf{$k$}\\
+  
+            \hline
+  
+            \multirow{6}{*}{STGCN-$A'$} & \multirow{3}{*}{Flow} & 3 & $18$\\
+            ~ & ~ & 6 & $14$\\
+            ~ & ~ & 12 & $2$\\
+            \cline{2-4}
+            ~ & \multirow{3}{*}{Speed} & 3 & $10$\\
+            ~ & ~ & 6 & $18$\\
+            ~ & ~ & 12 & $10$\\
+
+            \hline
+
+            \multirow{2}{*}{DCRNN-$A'$} & Flow & all & $8$\\
+            \cline{2-4}
+            ~ & Speed & all & $10$\\
+  
+            \bottomrule
+        \end{tabular}
+    \end{center}
+\end{table}
 
 \subsection{Road Correlation Analysis}
 可解释
