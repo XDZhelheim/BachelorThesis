@@ -165,6 +165,7 @@
   \信息中英键{密级}
   \信息中英键{题目}
   \信息中英键{副标题}
+  \信息中英键{副副标题}
   \信息中英键{姓名}
   \信息中英键{学号}
   \信息中英键{系别}
@@ -262,7 +263,7 @@
         U\hfill D\hfill C\下划线[2.3cm]{\UDC@中} \hspace{0.45\textwidth} & 密级\下划线[2.3cm]{\密级@中}
     \end{tabular}
     \vskip 1.35cm
-    \includegraphics[width=0.85\textwidth]{figures/logo/SUSTech-zh.pdf}
+    \includegraphics[width=0.85\textwidth]{images/logo/SUSTech-zh.pdf}
     \vskip 0.5cm
     {\粗体\宋体\小初 \thesis@subject}
     \vskip 3.5cm
@@ -300,7 +301,7 @@
     CLC  \下划线[2.3cm]{\分类号@英} \hfill Number\下划线[2.3cm]{\编号@英}\\[5pt]
     UDC\下划线[2.3cm]{\UDC@英} \hfill Available for reference~\quad$\square$Yes~\quad$\square$No
     \vskip 1.8cm
-    \includegraphics[width=0.9\textwidth]{figures/logo/SUSTech-en.pdf}
+    \includegraphics[width=0.9\textwidth]{images/logo/SUSTech-en.pdf}
     \vskip 1.6cm
     {\小初 \thesis@subject@en}
     \vskip 2.7cm
@@ -313,6 +314,14 @@
         }{% not empty
           \sustech@info@item{}[9cm]{\副标题@英}\\[9pt]
         }%
+
+        \ifdefempty{\副副标题@英}%
+        {% empty
+          \relax
+        }{% not empty
+          \sustech@info@item{}[9cm]{\副副标题@英}\\[9pt]
+        }%
+
       \end{tabular}
       \vfill
       \begin{tabular}{lc}
@@ -387,7 +396,8 @@
       {% empty
         \relax
       }{% not empty
-        \hspace*{\fill} \小二 ——\副标题@中\\
+        % \hspace*{\fill} \小二 ——\副标题@中\\
+        \副标题@中\\
       }%
     \vskip 1cm
     \宋体\四号\姓名@中 \\[9pt]

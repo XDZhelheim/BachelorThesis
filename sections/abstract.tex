@@ -1,9 +1,13 @@
 % !Mode:: "TeX:UTF-8"
 % !TEX program  = xelatex
-\begin{中文摘要}{关键词；关键词}
-  啊啊啊啊啊啊啊啊\footnote{???}
+\begin{中文摘要}{GPS 数据, 轨迹, 道路关联性, 交通状态预测}
+  交通状态预测的主要任务是分析流量、速度和密度等城市道路交通状况，挖掘交通模式，来预测未来的道路交通趋势。它不仅可以帮助交通管理者提前注意到交通拥堵的产生，而且可以为如何实施车辆限行提供科学依据。除此之外，交通状态预测也可以帮助出行者选择合适的出行路线，从而提高出行效率。交通预测的数据基础是历史交通状态数据和路网图数据。这些数据的典型特征是具有空间依赖性和时间依赖性。对于当前流行的 GCN 模型，空间依赖性仅由图中道路之间的静态关系表示。然而，现实世界中的交通状况要复杂得多，而且是随时间变化的。虽然研究所有的交通状况是不切实际的，但是各个车辆的轨迹很好地反映了实际的交通情况。越来越多的 GPS 设备记录着车辆的位置和时间戳，从而为轨迹数据集的构建提供了基础。本文基于车辆轨迹，深入研究道路转移信息，从而提出了道路关联性这一概念。我们构造了一个轨迹下一跳预测模型来学习每条道路的嵌入表示并以此计算道路相关性。通过重新生成邻接矩阵，我们将道路相关性集成到交通预测模型中，以预测未来的交通状态。大量的实验结果证明了道路相关性这一概念的有效性和合理性。
+
+  本文的相关代码已开源在 GitHub\footnote{\href{https://github.com/XDZhelheim/BachelorThesis}{https://github.com/XDZhelheim/BachelorThesis}}.
 \end{中文摘要}
 
-\begin{英文摘要}{kw, kw}
-  aaaaaaaaaaaaaaaaaaaaaaaa
+\begin{英文摘要}{GPS Data, Trajectory, Road Correlation, Traffic State Prediction}
+  Traffic state prediction is the process of analyzing urban road traffic conditions, including flow, speed and density, mining traffic patterns, and predicting road traffic trends. It can not only provide a scientific basis for traffic managers to perceive traffic congestion and limit vehicles in advance, but also provide a guarantee for travelers to choose proper travel routes and improve travel efficiency. Traffic prediction is based on the consideration of historical traffic state data and the road network graph. The data's typical characteristic is that it contains both spatial and temporal domains. For popular GCN-based models, spatial dependency is expressed only by the static relationship among roads in the graph. However, the traffic condition in real world is much more complicated and time-varying. Despite that it is impractical to collect all the traffic patterns, the vehicles' trajectories reflect them well and thoroughly. GPS devices can record the locations with timestamps of vehicles, enabling the construction of trajectory dataset. Based on trajectories, this paper digs into road transfer information and proposes \textit{trajectory-based road correlation}. A trajectory next-hop prediction model is built to learn the embeddings of each road and calculate road correlation. By computing \textit{refined adjacency matrix}, road correlation is integrated into traffic prediction models to predict future traffic states. Extensive experiment results prove the effectiveness and rationality of it.
+
+  The source code of our work is available on GitHub\footnote{\href{https://github.com/XDZhelheim/BachelorThesis}{https://github.com/XDZhelheim/BachelorThesis}}.
 \end{英文摘要}
