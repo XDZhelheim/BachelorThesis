@@ -183,6 +183,21 @@ Secondly, we analyze the choice of $k$ when calculating \textit{refined adjacenc
     \end{center}
 \end{table}
 
-\subsection{Road Correlation Analysis}
-可解释
-画道路图
+\subsection{Road Correlation Case Study}
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=\textwidth]{images/road_correlation.png}
+    \caption{Visualization for road correlations of $r_{233}$.}
+    \label{fig: road_correlation_map}
+\end{figure}
+In this section, we give a visualization for road correlation and select a specific road for a case study. We select roads $r_{155}$ to $r_{245}$, in total 91 roads, which lie in the bottom half of the road network, to visualize the road correlations among them, where the road correlation values are taken directly from \textit{road correlation matrix} $C$. As a result, the figure \ref{fig: road_correlation_map} is a grayscale image to show the correlations of road $r_{233}$ with other roads. The red road in the bottom right corner stands for $r_{233}$, while other roads are drawn by grey colors. A darker color means that the corresponding road has a higher correlation with $r_{233}$, and vice versa. If a road is white in the figure, then it has no correlation with $r_{233}$ at all. From the figure, we can observe that the nearby roads, which are $r_{231}, r_{245}, r_{232}, r_{238}, \dots$, are highly correlated with $r_{233}$. It meets our expectation because according to the map, they are $r_{233}$'s upstream and downstream roads, which means our model successfully captured the low-order dependencies. What's more, some long distance roads, such as $r_{200}, r_{181}, r_{177}, r_{160}$, also have considerable correlations with $r_{233}$, which are the high-order dependencies captured by the model. In short, the figure proves that the low and high-order spatial dependencies are both captured by our next-hop prediction model.
+
+Next, starting from road embedding matrix $E$, we perform t-SNE\cite{tsne} algorithm to reduce the embedding dimension from $64$ to $2$, and plot the points on a 2-D figure. The color of each road remains same as figure \ref{fig: road_correlation_map}, where the red point still stands for $r_{233}$. If $C$ is able to represent the road correlations, then the high-correlated roads mentioned above should be close to the red point. As shown in figure \ref{fig: road_correlation_tsne}, the points for $r_{245}, r_{242}, r_{231}, r_{200}, r_{177}, r_{181}, r_{161}$ are near to $r_{233}$, which means $C$ is able to represent the similarity between road embedding vectors, i.e. road correlation.
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=\textwidth]{images/road_tsne.png}
+    \caption{Road embedding points after t-SNE dimensionality reduction.}
+    \label{fig: road_correlation_tsne}
+\end{figure}
+
+In conclusion, these two case experiments prove not only the rationality of our thesis on \textit{trajectory-based road correlation}, but also the effectiveness of our proposed model and methods.
