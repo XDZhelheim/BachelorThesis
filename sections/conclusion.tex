@@ -1,3 +1,5 @@
 
 \section{Conclusion and Future Work}
-This is conclusion.
+In this paper, we illustrated the construction of our trajectory dataset from raw GPS data. Then we proposed the concept of \textit{trajectory-based road correlation} and built a trajectory next-hop model to learn road embeddings and calculate \textit{road correlation matrix}. Based on that, we gave the theory of \textit{refined adjacency matrix} and integrated it into SOTA traffic prediction models to improve their performance. Extensive experiment results proved the effectiveness and robustness of our models. Following, a case study demonstrated the rationality of the road correlation.
+
+However, the \textit{road correlation matrix} $C$ is still a static representation of the road network graph. To strengthen its temporality, we are planning to extend our current work to study time-varying road correlations by splitting $C$ into 24 hours and build a time-dynamic traffic prediction model.
