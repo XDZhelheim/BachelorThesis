@@ -442,9 +442,8 @@
   % 或者可以将refname置空, 按照附录的样式修改.
   \phantomsection
   \addcontentsline{toc}{section}{References}
-  \centerline{References}
   % \sectionmark{References}
-  % \section*{\centerline{References}}
+  \section*{\centerline{References}}
 }
 % 附录
 \newcommand{\附录}{
@@ -461,9 +460,8 @@
 \newcommand{\致谢}{
   \phantomsection
   \addcontentsline{toc}{section}{Acknowledgements}
-  \centerline{Acknowledgements}
   % \sectionmark{Acknowledgements}
-  % \section*{\centerline{Acknowledgements}}
+  \section*{\centerline{Acknowledgements}}
 }
 % 设定元数据
 \ifsustech@chinese
