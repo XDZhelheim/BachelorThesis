@@ -314,14 +314,6 @@
         }{% not empty
           \sustech@info@item{}[9cm]{\副标题@英}\\[9pt]
         }%
-
-        \ifdefempty{\副副标题@英}%
-        {% empty
-          \relax
-        }{% not empty
-          \sustech@info@item{}[9cm]{\副副标题@英}\\[9pt]
-        }%
-
       \end{tabular}
       \vfill
       \begin{tabular}{lc}
