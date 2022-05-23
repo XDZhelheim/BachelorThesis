@@ -5,8 +5,6 @@ In this section, the details of training road embeddings by the next-hop predict
 \subsection{Settings}
 Our experiments were performed on a sever equipped with Intel(R) Xeon(R) Silver 4216 CPU @ 2.10GHz and an NVIDIA GeForce RTX 2080Ti graphics card. The PyTorch\cite{pytorch} version is 1.7.1 with Python 3.7.11.
 
-For the next-hop prediction model, the window size for trajectory fragments generation was set as $w=5$. After data processing, we got 1,751,602 trajectories in total. Removing too long and too short ones, there were 1,351,700 remaining. Then we put the trajectories into 24 bins according to their starting time and randomly sampled $p=80\%$ data in each bin to combine as the whole dataset. Finally, there were 1,076,886 trajectories. The data ratio for training, validation, and testing was set as 7:1:2. After window sliding, we got 10,228,578 trajectory fragments for training, and 1,455,100 for validation. Adam\cite{adam} algorithm was employed to control the overall training process, and the loss function was \textit{Cross Entropy Loss}. The complete parameter selection is given in table \ref{next-hop_params}.
-
 \begin{table}[htb]
     \begin{center}
         \caption{Tuned parameters for next-hop prediction.}
@@ -31,6 +29,8 @@ For the next-hop prediction model, the window size for trajectory fragments gene
         \end{tabular}
     \end{center}
 \end{table}
+
+For the next-hop prediction model, the window size for trajectory fragments generation was set as $w=5$. After data processing, we got 1,751,602 trajectories in total. Removing too long and too short ones, there were 1,351,700 remaining. Then we put the trajectories into 24 bins according to their starting time and randomly sampled $p=80\%$ data in each bin to combine as the whole dataset. Finally, there were 1,076,886 trajectories. The data ratio for training, validation, and testing was set as 7:1:2. After window sliding, we got 10,228,578 trajectory fragments for training, and 1,455,100 for validation. Adam\cite{adam} algorithm was employed to control the overall training process, and the loss function was \textit{Cross Entropy Loss}. The complete parameter selection is given in table \ref{next-hop_params}.
 
 For traffic state prediction models, the experiments were performed on DL-Traff\cite{dl-traff}, an open-source benchmark platform. As for the parameters, the input steps and prediction steps were both set to 12. The size of traffic state matrix is $n_r\times n_t=492\times 8064$. The data split ratio was also 7:1:2, and after sampling, we got 6437 traffic state vectors for training. The optimizer was Adam where the learning rate was set as 0.001, and the loss function was \textit{Mean Squared Error (MSE) Loss}. Batch size was set to 32 in order to avoid the \textit{CUDA Out of Memory} exception. Similarly, the training process would be early-stopped if the validation loss was not decreasing for 10 epochs, then the best model on validation data would be saved. Details are provided in table \ref{traff_pred_params}.
 
@@ -184,13 +184,41 @@ Secondly, we analyze the choice of $k$ when calculating \textit{refined adjacenc
 \end{table}
 
 \subsection{Road Correlation Case Study}
+In this section, we give a visualization for road correlation and select a specific road for a case study. At first, figure \ref{fig: heatmap} provides the heatmap of road correlations among $r_{225}$ to $r_{245}$. We selected these roads due to the space limitation. In the figure, the correlation values are normalized by MinMax normalization algorithm, and shown as a color block in the heatmap. Some rows have more high-value blocks compared to others. For example, row 241 and row 242. It indicates that some roads have high correlations with most roads in the road network. Referring to figure \ref{fig: gps_seq} and figure \ref{fig: road_correlation_map}, it can be seen that $r_{241}$ and $r_{242}$ are main roads of this district, which confirms our observation.
+
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=\textwidth]{images/road_correlation.png}
-    \caption{Visualization for road correlations of $r_{233}$.}
-    \label{fig: road_correlation_map}
+    \caption{Visualization of road correlations.}
+    \label{fig: vis_road_cor}
+    \begin{subfigure}[t]{0.33\linewidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/heatmap.png}
+        \caption{Heatmap}
+        \label{fig: heatmap}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.66\linewidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/road_correlation.png}
+        \caption{Road correlations of $r_{233}$ on map}
+        \label{fig: road_correlation_map}
+    \end{subfigure}
 \end{figure}
-In this section, we give a visualization for road correlation and select a specific road for a case study. We select roads $r_{155}$ to $r_{245}$, in total 91 roads, which lie in the bottom half of the road network, to visualize the road correlations among them, where the road correlation values are taken directly from \textit{road correlation matrix} $C$. As a result, the figure \ref{fig: road_correlation_map} shows the correlations of road $r_{233}$ with other roads. The red road in the bottom right corner stands for $r_{233}$, while other roads are drawn by the color bar according to their correlation values. A redder color means that the corresponding road has a higher correlation with $r_{233}$, and vice versa. If a road is pure blue in the figure, then it has no correlation with $r_{233}$ at all. From the figure, we can observe that the nearby roads, which are $r_{231}, r_{245}, r_{242}, \dots$, are highly correlated with $r_{233}$. It meets our expectation because according to the map, they are $r_{233}$'s upstream and downstream roads, which means our model successfully captured the low-order dependencies. What's more, some long distance roads, such as $r_{200}, r_{181}, r_{177}$, also have considerable correlations with $r_{233}$, which are the high-order dependencies captured by the model. In short, the figure proves that the low and high-order spatial dependencies are both captured by our next-hop prediction model.
+
+% \begin{figure}[htb]
+%     \centering
+%     \includegraphics[width=\textwidth]{images/heatmap.png}
+%     \caption{Road correlations heatmap.}
+%     \label{fig: heatmap}
+% \end{figure}
+
+For the visualization on road network, we select roads $r_{155}$ to $r_{245}$, in total 91 roads, which lie in the bottom half of the road network, to visualize the road correlations among them. The road correlation values are taken directly from \textit{road correlation matrix} $C$, which is also the same as the row 233 in the heatmap. As a result, the figure \ref{fig: road_correlation_map} shows the correlations of road $r_{233}$ with other roads. The red road in the bottom right corner stands for $r_{233}$, while other roads are drawn by the color bar according to their correlation values. A redder color means that the corresponding road has a higher correlation with $r_{233}$, and vice versa. If a road is pure blue in the figure, then it has no correlation with $r_{233}$ at all. From the figure, we can observe that the nearby roads, which are $r_{231}, r_{245}, r_{242}, \dots$, are highly correlated with $r_{233}$. It meets our expectation because according to the map, they are $r_{233}$'s upstream and downstream roads, which means our model successfully captured the low-order dependencies. What's more, some long distance roads, such as $r_{200}, r_{181}, r_{177}$, also have considerable correlations with $r_{233}$, which are the high-order dependencies captured by the model. In short, the figure proves that the low and high-order spatial dependencies are both captured by our next-hop prediction model.
+
+% \begin{figure}[htb]
+%     \centering
+%     \includegraphics[width=\textwidth]{images/road_correlation.png}
+%     \caption{Visualization for road correlations of $r_{233}$.}
+%     \label{fig: road_correlation_map}
+% \end{figure}
 
 Next, starting from road embedding matrix $E$, we perform t-SNE\cite{tsne} algorithm to reduce the embedding dimension from $d_r=64$ to $2$, and plot the points on a 2-D figure. The color of each road remains same as figure \ref{fig: road_correlation_map}, where the red point still stands for $r_{233}$. If $C$ is able to represent the road correlations, then the high-correlated roads mentioned above should be close to the red point. As shown in figure \ref{fig: road_correlation_tsne}, the points for $r_{245}, r_{242}, r_{231}, r_{200}, r_{177}, r_{181}$ are near to $r_{233}$, which means $C$ is able to represent the similarity between road embedding vectors, i.e. road correlation.
 \begin{figure}[htb]

@@ -72,7 +72,7 @@ This subsection gives the definitions\cite{AAAI21} of the concepts and tasks occ
 \end{problem}
 
 \begin{problem}[Trajectory-based Road Correlation]
-    Given a road network graph $\mathcal{G}=(\mathcal{R}, \mathcal{E}, A)$ and a trajectory set $\mathcal T$, find a road correlation function $Cor$ with respect to $\mathcal{T}$ which takes two roads as input and returns a real number $Cor(r_i, r_j)$ to quantify the spatial dependency between two roads $r_i$ and $r_j$. The value is bigger if the two roads have a stronger dependency, i.e. they frequently co-occur in same trajectories. The road correlation matrix $C\in\RR^{n_r\times n_r}$ stores all the correlation values s.t. $C_{i, j}=Cor(r_i, r_j)$.
+    Given a road network graph $\mathcal{G}=(\mathcal{R}, \mathcal{E}, A)$ and a trajectory set $\mathcal T$, find a road correlation function $Cor$ with respect to $\mathcal{T}$ which takes two roads as input and returns a real number $Cor(r_i, r_j)$ to quantify the spatial correlation between two roads $r_i$ and $r_j$. The value is bigger if the two roads have a stronger correlation. The road correlation matrix $C\in\RR^{n_r\times n_r}$ stores all the correlation values s.t. $C_{i, j}=Cor(r_i, r_j)$.
 \end{problem}
 
 \begin{problem}[Traffic State Prediction]

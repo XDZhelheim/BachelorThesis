@@ -2,7 +2,7 @@
 
 Title: Traffic State Prediction Based on Road Correlation Analysis with GPS Data
 
-Main body: 6300+ words, 13 figures, 7 tables.
+Main body: 6491 words, 14 figures, 7 tables.
 
 Code: https://github.com/XDZhelheim/TrafficFlowModel
 

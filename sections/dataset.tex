@@ -140,6 +140,7 @@ Having the boundary latitudes and longitudes, we can download the road network a
   \item \textbf{Two-way Lanes.} Roads are bidirectional, which is faithfully reflected in the graph. However, it will cause a problem that the two lanes of a road do not share the same endpoints. For convenience, we combine them, and manually reverse the road for its bi-directionality.
 \end{enumerate}
 
+A visualization of these four cases is provided by figure \ref{fig: simplification}. To handle them, we use QGIS\footnote{\href{https://qgis.org/en/site/}{https://qgis.org/en/site/}} as a tool to redraw the graph by ourselves. QGIS is a geographic information system (GIS) software which allows users to analyze and edit spatial information in graphical maps. Figure \ref{fig: graph_after} shows the road network graph $\mathcal G$ after simplification where the four cases are eliminated thoroughly. As a result, it has $n_r=492$ roads.
 \begin{figure}[htb]
   \centering
   \caption{Four simplification cases.}
@@ -169,8 +170,6 @@ Having the boundary latitudes and longitudes, we can download the road network a
     \label{fig: two-way}
   \end{subfigure}
 \end{figure}
-
-A visualization of these four cases is provided by figure \ref{fig: simplification}. To handle them, we use QGIS\footnote{\href{https://qgis.org/en/site/}{https://qgis.org/en/site/}} as a tool to redraw the graph by ourselves. QGIS is a geographic information system (GIS) software which allows users to analyze and edit spatial information in graphical maps. Figure \ref{fig: graph_after} shows the road network graph $\mathcal G$ after simplification where the four cases are eliminated thoroughly. As a result, it has $n_r=492$ roads.
 
 \subsection{Map Matching}
 Map matching\cite{mm} is a procedure to match a location, in this paper, a \textit{(latitude, longitude)} pair, on a specific road to determine where the vehicle is travelling on. A variety of map matching algorithms have been proposed by researchers around the world in recent years, such as Hidden Markov Map Matching\cite{HMMM}, ST-Matching\cite{stmm} and Fast Map Matching\cite{fmm}. We tried several map matching functions and eventually choose Fast Map Matching (FMM) because of its fastest speed and open-source library.
