@@ -220,12 +220,13 @@ For the visualization on road network, we select roads $r_{155}$ to $r_{245}$, i
 %     \label{fig: road_correlation_map}
 % \end{figure}
 
-Next, starting from road embedding matrix $E$, we perform t-SNE\cite{tsne} algorithm to reduce the embedding dimension from $d_r=64$ to $2$, and plot the points on a 2-D figure. The color of each road remains same as figure \ref{fig: road_correlation_map}, where the red point still stands for $r_{233}$. If $C$ is able to represent the road correlations, then the high-correlated roads mentioned above should be close to the red point. As shown in figure \ref{fig: road_correlation_tsne}, the points for $r_{245}, r_{242}, r_{231}, r_{200}, r_{177}, r_{181}$ are near to $r_{233}$, which means $C$ is able to represent the similarity between road embedding vectors, i.e. road correlation.
 \begin{figure}[htb]
     \centering
     \includegraphics[width=\textwidth]{images/road_tsne.png}
     \caption{Road embedding points after t-SNE dimensionality reduction.}
     \label{fig: road_correlation_tsne}
 \end{figure}
+
+Next, starting from road embedding matrix $E$, we perform t-SNE\cite{tsne} algorithm to reduce the embedding dimension from $d_r=64$ to $2$, and plot the points on a 2-D figure. The color of each road remains same as figure \ref{fig: road_correlation_map}, where the red point still stands for $r_{233}$. If $C$ is able to represent the road correlations, then the high-correlated roads mentioned above should be close to the red point. As shown in figure \ref{fig: road_correlation_tsne}, the points for $r_{245}, r_{242}, r_{231}, r_{200}, r_{177}, r_{181}$ are near to $r_{233}$, which means $C$ is able to represent the similarity between road embedding vectors, i.e. road correlation.
 
 In conclusion, these two case experiments prove not only the rationality of our thesis on \textit{trajectory-based road correlation}, but also the effectiveness of our proposed model and methods.
