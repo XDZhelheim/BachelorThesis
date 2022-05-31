@@ -11,20 +11,20 @@ Our experiments were performed on a sever equipped with Intel(R) Xeon(R) Silver 
         \label{next-hop_params}
         \begin{tabular}{clll}
             \toprule
-  
-            \textbf{Notation} & \textbf{Parameter} & \textbf{Search Space} & \textbf{Selected Value}\\
-  
+
+            \textbf{Notation} & \textbf{Parameter}       & \textbf{Search Space}          & \textbf{Selected Value} \\
+
             \midrule
-  
-            $w$ & Window size & $\{5 \}$ & $5$\\
-            $p$ & Sampling proportion & $\{0.05, 0.1, 0.2, 0.4, 0.8\}$ & $0.8$\\
-            $d_r$ & Road embedding dimension & $\{16, 32, 64, 128 \}$ & $64$\\
-            $d_h$ & LSTM hidden size & $\{32, 64, 128, 256 \}$ & $256$\\
-            $d_o$ & Linear output dimension & $d_o=n_r=\#roads$ & $492$\\
-            ~ & Batch size & $\{64, 128, 256, 512 \}$ & $256$\\
-            ~ & Learning rate & $\{0.0001, 0.001\}$ & $0.0001$\\
-            ~ & Early stopping epochs & $\{5, 10, 15\}$ & $10$\\
-  
+
+            $w$               & Window size              & $\{5 \}$                       & $5$                     \\
+            $p$               & Sampling proportion      & $\{0.05, 0.1, 0.2, 0.4, 0.8\}$ & $0.8$                   \\
+            $d_r$             & Road embedding dimension & $\{16, 32, 64, 128 \}$         & $64$                    \\
+            $d_h$             & LSTM hidden size         & $\{32, 64, 128, 256 \}$        & $256$                   \\
+            $d_o$             & Linear output dimension  & $d_o=n_r=\#roads$              & $492$                   \\
+            ~                 & Batch size               & $\{64, 128, 256, 512 \}$       & $256$                   \\
+            ~                 & Learning rate            & $\{0.0001, 0.001\}$            & $0.0001$                \\
+            ~                 & Early stopping epochs    & $\{5, 10, 15\}$                & $10$                    \\
+
             \bottomrule
         \end{tabular}
     \end{center}
@@ -40,18 +40,18 @@ For traffic state prediction models, the experiments were performed on DL-Traff\
         \label{traff_pred_params}
         \begin{tabular}{cll}
             \toprule
-  
-            \textbf{Notation} & \textbf{Parameter} & \textbf{Value}\\
-  
+
+            \textbf{Notation} & \textbf{Parameter}    & \textbf{Value} \\
+
             \midrule
-  
-            $w_{in}$ & Input steps & $12$\\
-            $w_{out}$ & Prediction steps & $12$\\
-            ~ & Batch size & $32$\\
-            ~ & Learning rate & $0.001$\\
-            ~ & Early stopping epochs & $10$\\
-            ~ & Max training epochs & $200$\\
-  
+
+            $w_{in}$          & Input steps           & $12$           \\
+            $w_{out}$         & Prediction steps      & $12$           \\
+            ~                 & Batch size            & $32$           \\
+            ~                 & Learning rate         & $0.001$        \\
+            ~                 & Early stopping epochs & $10$           \\
+            ~                 & Max training epochs   & $200$          \\
+
             \bottomrule
         \end{tabular}
     \end{center}
@@ -65,7 +65,7 @@ We selected two baseline traffic prediction models that can effectively capture 
     \item \textbf{CP} (Copy Last Steps). Directly copy the last one or multiple steps as the prediction result.
     \item \textbf{STGCN}\cite{STGCN} (Spatio-Temporal Graph Convolutional Networks). STGCN is proposed in 2018, which is one of the earliest spatiotemporal GCN models for traffic prediction. It uses gated TCN\cite{TCN} to capture temporal dependencies and applies spectral graph convolution\cite{GCN0} on graph to model the spatial dependencies.
     \item \textbf{DCRNN}\cite{DCRNN} (Diffusion Convolutional Recurrent Neural Network). DCRNN is another typical GCN model that is also proposed in 2018. Instead of spectral graph convolution, it implements diffusion convolution through bidirectional random walk to capture the transition information. Temporally, it integrates diffusion convolution into GRU and proposed an encoder-decoder structure to enable multistep prediction.
-    \item \textbf{GWNET}\cite{GWNET} (Graph WaveNet). Graph WaveNet is a GCN model proposed in 2019, which still remains being one of the best SOTA models nowadays. It adopts adaptive/learnable graph rather than a static one that used in STGCN and DCRNN. By combining the original adjacency matrix and the learned graph, it can rapidly boost the prediction accuracy of traffic states.
+    \item \textbf{GWNET}\cite{GWNET} (Graph WaveNet). Graph WaveNet is a GCN model proposed in 2019, which still remains being one of the best SOTA models nowadays. It adopts adaptive/learnable graph rather than a static one that used in STGCN and DCRNN. By combining the original adjacency matrix and the learned graph, it can rapidly boost the prediction accuracy of traffic states. The adaptive graph functionality is disabled in the experiments for the comparison on different input graphs.
 \end{itemize}
 
 We set the input graph as (1) \textit{adjacency matrix} $A$, (2) \textit{OD matrix} (3) \textit{Pearson correlation coefficient matrix of temporal features} $P$ (4) \textit{cosine similarity matrix of temporal features} (5) \textit{DTW distance of temporal features} (6) \textit{road correlation matrix} $C$ (7) \textit{refined adjacency matrix} $A'$ to compare their performance and illustrate the effect of road correlation in traffic state prediction. We give an ablation study by comparing the performance of $C$ and $A'$.
@@ -75,9 +75,9 @@ Following previous studies, we use \textit{Root Mean Square Error (RMSE)}, \text
 
 \begin{equation}
     \begin{aligned}
-        MAE&=\frac 1n\sum_{i=1}^n|\hat{y_i}-y_i|\\
-        MAPE&=\frac 1n\sum_{i=1}^n|\frac{\hat{y_i}-y_i}{y_i}|\\
-        RMSE&=\sqrt{\frac 1n\sum_{i=1}^n(\hat{y_i}-y_i)^2}
+        MAE  & =\frac 1n\sum_{i=1}^n|\hat{y_i}-y_i|             \\
+        MAPE & =\frac 1n\sum_{i=1}^n|\frac{\hat{y_i}-y_i}{y_i}| \\
+        RMSE & =\sqrt{\frac 1n\sum_{i=1}^n(\hat{y_i}-y_i)^2}
     \end{aligned}
 \end{equation}
 
@@ -89,69 +89,69 @@ Following previous studies, we use \textit{Root Mean Square Error (RMSE)}, \text
         \resizebox{\textwidth}{!}{
             \begin{tabular}{c|c|c|ccc|ccc|ccc}
                 \toprule
-                
-                \multirow{2}{*}{Traffic State} & \multirow{2}{*}{Model} & Graph & \multicolumn{3}{c|}{3 Steps / 15 min} & \multicolumn{3}{c|}{6 Steps / 30 min} & \multicolumn{3}{c}{12 Steps / 60 min} \\
+
+                \multirow{2}{*}{Traffic State} & \multirow{2}{*}{Model} & Graph & \multicolumn{3}{c|}{3 Steps / 15 min} & \multicolumn{3}{c|}{6 Steps / 30 min} & \multicolumn{3}{c}{12 Steps / 60 min}                                                                                                       \\
 
                 \cline{4-12}
 
-                                                 &                        & Type                    & RMSE       & MAE       & MAPE        & RMSE      & MAE       & MAPE        & RMSE       & MAE        & MAPE        \\
+                                               &                        & Type  & RMSE                                  & MAE                                   & MAPE                                  & RMSE          & MAE           & MAPE             & RMSE          & MAE           & MAPE             \\
                 \hline
 
-                \multirow{23}{*}{Flow}           & HA                     & -                       & 5.84       & 4.35      & 41.18\%     & 5.82      & 4.34      & 41.10\%     & 5.80       & 4.33       & 40.98\%     \\
-                                                 & CP                     & -                       & 7.23       & 5.37      & 50.13\%     & 7.23      & 5.38      & 50.15\%     & 7.24       & 5.38       & 50.16\%     \\
+                \multirow{23}{*}{Flow}         & HA                     & -     & 5.84                                  & 4.35                                  & 41.18\%                               & 5.82          & 4.34          & 41.10\%          & 5.80          & 4.33          & 40.98\%          \\
+                                               & CP                     & -     & 7.23                                  & 5.37                                  & 50.13\%                               & 7.23          & 5.38          & 50.15\%          & 7.24          & 5.38          & 50.16\%          \\
                 \cline{2-12}
-                                                 & \multirow{7}{*}{STGCN} & A                       & 4.44       & 3.46      & 33.00\%     & 4.64      & 3.57      & 33.64\%     & 5.07       & 3.88       & 36.07\%     \\
-                                                 &                        & OD                      & 4.42       & 3.44      & 33.08\%     & 4.72      & 3.61      & 33.73\%     & 5.43       & 4.12       & 37.90\%     \\
-                                                 &                        & P                       & 5.43       & 4.08      & 37.40\%     & 5.74      & 4.39      & 40.47\%     & 6.35       & 4.75       & 45.24\%     \\
-                                                 &                        & COS                     & 5.43       & 4.08      & 37.40\%     & 5.74      & 4.39      & 40.47\%     & 6.35       & 4.75       & 45.24\%     \\
-                                                 &                        & DTW                     & 4.39       & 3.40      & 32.40\%     & 4.63      & 3.57      & 33.70\%     & 5.03       & 3.82       & 35.73\%     \\
-                                                 &                        & C                       & 4.38       & 3.40      & 32.41\%     & 4.56      & 3.52      & 33.33\%     & 5.03       & 3.82       & 35.87\%     \\
-                                                 &                        & A'                      & 4.42       & 3.43      & 32.67\%     & 4.61      & 3.55      & 33.35\%     & 5.03       & 3.82       & 35.80\%     \\
+                                               & \multirow{7}{*}{STGCN} & A     & 4.44                                  & 3.46                                  & 33.00\%                               & 4.64          & 3.57          & 33.64\%          & 5.07          & 3.88          & 36.07\%          \\
+                                               &                        & OD    & 4.42                                  & 3.44                                  & 33.08\%                               & 4.72          & 3.61          & 33.73\%          & 5.43          & 4.12          & 37.90\%          \\
+                                               &                        & P     & 5.43                                  & 4.08                                  & 37.40\%                               & 5.74          & 4.39          & 40.47\%          & 6.35          & 4.75          & 45.24\%          \\
+                                               &                        & COS   & 5.43                                  & 4.08                                  & 37.40\%                               & 5.74          & 4.39          & 40.47\%          & 6.35          & 4.75          & 45.24\%          \\
+                                               &                        & DTW   & 4.39                                  & \textbf{3.40}                         & 32.40\%                               & 4.63          & 3.57          & 33.70\%          & \textbf{5.03} & \textbf{3.82} & \textbf{35.73\%} \\
+                                               &                        & C     & \textbf{4.38}                         & \textbf{3.40}                         & \textbf{32.41\%}                      & \textbf{4.56} & \textbf{3.52} & \textbf{33.33\%} & \textbf{5.03} & \textbf{3.82} & 35.87\%          \\
+                                               &                        & A'    & 4.42                                  & 3.43                                  & 32.67\%                               & 4.61          & 3.55          & 33.35\%          & \textbf{5.03} & \textbf{3.82} & 35.80\%          \\
                 \cline{2-12}
-                                                 & \multirow{7}{*}{DCRNN} & A                       & 4.47       & 3.46      & 33.01\%     & 4.66      & 3.60      & 34.06\%     & 5.03       & 3.85       & 35.76\%     \\
-                                                 &                        & OD                      & 4.49       & 3.46      & 32.92\%     & 4.71      & 3.61      & 34.16\%     & 5.15       & 3.87       & 36.19\%     \\
-                                                 &                        & P                       & 7.13       & 5.55      & 50.66\%     & 6.86      & 5.30      & 48.81\%     & 7.97       & 6.05       & 55.66\%     \\
-                                                 &                        & COS                     & 4.42       & 3.42      & 32.71\%     & 4.60      & 3.53      & 33.46\%     & 5.01       & 3.79       & 35.35\%     \\
-                                                 &                        & DTW                     & 11.11      & 8.83      & 76.44\%     & 11.90     & 9.90      & 89.60\%     & 12.56      & 10.58      & 97.62\%     \\
-                                                 &                        & C                       & 8.19       & 6.13      & 55.66\%     & 8.18      & 6.13      & 55.64\%     & 8.13       & 6.09       & 55.33\%     \\
-                                                 &                        & A'                      & 4.23       & 3.28      & 31.46\%     & 4.63      & 3.54      & 33.60\%     & 4.98       & 3.77       & 35.26\%     \\
+                                               & \multirow{7}{*}{DCRNN} & A     & 4.47                                  & 3.46                                  & 33.01\%                               & 4.66          & 3.60          & 34.06\%          & 5.03          & 3.85          & 35.76\%          \\
+                                               &                        & OD    & 4.49                                  & 3.46                                  & 32.92\%                               & 4.71          & 3.61          & 34.16\%          & 5.15          & 3.87          & 36.19\%          \\
+                                               &                        & P     & 7.13                                  & 5.55                                  & 50.66\%                               & 6.86          & 5.30          & 48.81\%          & 7.97          & 6.05          & 55.66\%          \\
+                                               &                        & COS   & 4.42                                  & 3.42                                  & 32.71\%                               & 4.60          & 3.53          & 33.46\%          & 5.01          & 3.79          & 35.35\%          \\
+                                               &                        & DTW   & 11.11                                 & 8.83                                  & 76.44\%                               & 11.90         & 9.90          & 89.60\%          & 12.56         & 10.58         & 97.62\%          \\
+                                               &                        & C     & 8.19                                  & 6.13                                  & 55.66\%                               & 8.18          & 6.13          & 55.64\%          & 8.13          & 6.09          & 55.33\%          \\
+                                               &                        & A'    & \textbf{4.23}                         & \textbf{3.28}                         & \textbf{31.46\%}                      & \textbf{4.63} & \textbf{3.54} & \textbf{33.60\%} & \textbf{4.98} & \textbf{3.77} & \textbf{35.26\%} \\
                 \cline{2-12}
-                                                 & \multirow{7}{*}{GWNET} & A                       & 4.45       & 3.45      & 32.66\%     & 4.69      & 3.61      & 33.97\%     & 5.21       & 3.94       & 36.46\%     \\
-                                                 &                        & OD                      & 4.51       & 3.48      & 32.76\%     & 4.78      & 3.65      & 34.04\%     & 5.45       & 4.07       & 36.81\%     \\
-                                                 &                        & P                       & 4.31       & 3.34      & 32.00\%     & 4.58      & 3.51      & 33.44\%     & 4.93       & 3.73       & 34.93\%     \\
-                                                 &                        & COS                     & 4.48       & 3.47      & 33.12\%     & 4.86      & 3.72      & 34.94\%     & 5.48       & 4.12       & 37.78\%     \\
-                                                 &                        & DTW                     & 4.61       & 3.54      & 33.30\%     & 5.06      & 3.82      & 35.41\%     & 5.72       & 4.22       & 38.26\%     \\
-                                                 &                        & C                       & 4.48       & 3.45      & 32.82\%     & 4.68      & 3.58      & 33.79\%     & 5.13       & 3.85       & 35.71\%     \\
-                                                 &                        & A'                      & 4.41       & 3.41      & 32.61\%     & 4.57      & 3.51      & 33.31\%     & 4.98       & 3.76       & 35.25\%     \\
+                                               & \multirow{7}{*}{GWNET} & A     & 4.45                                  & 3.45                                  & 32.66\%                               & 4.69          & 3.61          & 33.97\%          & 5.21          & 3.94          & 36.46\%          \\
+                                               &                        & OD    & 4.51                                  & 3.48                                  & 32.76\%                               & 4.78          & 3.65          & 34.04\%          & 5.45          & 4.07          & 36.81\%          \\
+                                               &                        & P     & \textbf{4.31}                         & \textbf{3.34}                         & \textbf{32.00\%}                      & 4.58          & 3.51          & 33.44\%          & \textbf{4.93} & \textbf{3.73} & \textbf{34.93\%} \\
+                                               &                        & COS   & 4.48                                  & 3.47                                  & 33.12\%                               & 4.86          & 3.72          & 34.94\%          & 5.48          & 4.12          & 37.78\%          \\
+                                               &                        & DTW   & 4.61                                  & 3.54                                  & 33.30\%                               & 5.06          & 3.82          & 35.41\%          & 5.72          & 4.22          & 38.26\%          \\
+                                               &                        & C     & 4.48                                  & 3.45                                  & 32.82\%                               & 4.68          & 3.58          & 33.79\%          & 5.13          & 3.85          & 35.71\%          \\
+                                               &                        & A'    & 4.41                                  & 3.41                                  & 32.61\%                               & \textbf{4.57} & \textbf{3.51} & \textbf{33.31\%} & 4.98          & 3.76          & 35.25\%          \\
                 \hline
                 \hline
 
-                \multirow{23}{*}{Speed}          & HA                     & -                       & 7.33       & 5.28      & 26.07\%     & 7.33      & 5.28      & 26.08\%     & 7.32       & 5.27       & 26.04\%     \\
-                                                 & CP                     & -                       & 9.30       & 6.50      & 30.65\%     & 9.30      & 6.51      & 30.66\%     & 9.30       & 6.51       & 30.63\%     \\
+                \multirow{23}{*}{Speed}        & HA                     & -     & 7.33                                  & 5.28                                  & 26.07\%                               & 7.33          & 5.28          & 26.08\%          & 7.32          & 5.27          & 26.04\%          \\
+                                               & CP                     & -     & 9.30                                  & 6.50                                  & 30.65\%                               & 9.30          & 6.51          & 30.66\%          & 9.30          & 6.51          & 30.63\%          \\
                 \cline{2-12}
-                                                 & \multirow{7}{*}{STGCN} & A                       & 6.6        & 4.65      & 23.67\%     & 6.63      & 4.66      & 24.22\%     & 6.71       & 4.74       & 24.01\%     \\
-                                                 &                        & OD                      & 6.61       & 4.66      & 23.64\%     & 6.62      & 4.67      & 24.05\%     & 6.71       & 4.76       & 24.14\%     \\
-                                                 &                        & P                       & 6.6        & 4.64      & 23.61\%     & 7.28      & 5.36      & 27.06\%     & 6.5        & 4.56       & 24.30\%     \\
-                                                 &                        & COS                     & 6.6        & 4.64      & 23.61\%     & 7.28      & 5.36      & 27.06\%     & 6.68       & 4.72       & 23.95\%     \\
-                                                 &                        & DTW                     & 6.94       & 4.99      & 26.26\%     & 7.16      & 5.21      & 27.13\%     & 6.98       & 5.03       & 25.96\%     \\
-                                                 &                        & C                       & 6.62       & 4.66      & 23.87\%     & 6.63      & 4.69      & 24.10\%     & 6.67       & 4.71       & 24.04\%     \\
-                                                 &                        & A'                      & 6.6        & 4.65      & 23.66\%     & 6.63      & 4.68      & 24.04\%     & 6.67       & 4.72       & 24.00\%     \\
+                                               & \multirow{7}{*}{STGCN} & A     & \textbf{6.6}                          & \textbf{4.65}                         & 23.67\%                               & 6.63          & \textbf{4.66} & 24.22\%          & 6.71          & 4.74          & 24.01\%          \\
+                                               &                        & OD    & 6.61                                  & 4.66                                  & 23.64\%                               & \textbf{6.62} & 4.67          & 24.05\%          & 6.71          & 4.76          & 24.14\%          \\
+                                               &                        & P     & 6.62                                  & 4.66                                  & 23.85\%                               & 6.64          & 4.69          & 23.92\%          & \textbf{6.67} & 4.72          & 24.06\%          \\
+                                               &                        & COS   & 6.61                                  & 4.66                                  & 23.80\%                               & 6.64          & 4.69          & \textbf{23.91\%} & \textbf{6.67} & \textbf{4.71} & 24.06\%          \\
+                                               &                        & DTW   & 6.61                                  & \textbf{4.65}                         & 24.02\%                               & 6.63          & 4.68          & 24.01\%          & 6.69          & 4.76          & 24.16\%          \\
+                                               &                        & C     & 6.62                                  & 4.66                                  & 23.87\%                               & 6.63          & 4.69          & 24.10\%          & \textbf{6.67} & \textbf{4.71} & 24.04\%          \\
+                                               &                        & A'    & \textbf{6.6}                          & \textbf{4.65}                         & \textbf{23.66\%}                      & 6.63          & 4.68          & 24.04\%          & \textbf{6.67} & 4.72          & \textbf{24.00\%} \\
                 \cline{2-12}
-                                                 & \multirow{7}{*}{DCRNN} & A                       & 6.61       & 4.65      & 23.82\%     & 6.65      & 4.69      & 24.00\%     & 6.71       & 4.76       & 24.29\%     \\
-                                                 &                        & OD                      & 6.83       & 4.87      & 25.04\%     & 7.02      & 5.07      & 25.37\%     & 7.3        & 5.33       & 26.64\%     \\
-                                                 &                        & P                       & 6.59       & 4.64      & 23.80\%     & 6.63      & 4.67      & 23.95\%     & 6.67       & 4.73       & 24.17\%     \\
-                                                 &                        & COS                     & 6.7        & 4.75      & 24.63\%     & 6.79      & 4.85      & 25.13\%     & 6.98       & 5.04       & 25.61\%     \\
-                                                 &                        & DTW                     & 6.63       & 4.65      & 23.95\%     & 6.67      & 4.7       & 24.12\%     & 6.74       & 4.8        & 24.41\%     \\
-                                                 &                        & C                       & 8.41       & 6.39      & 30.90\%     & 8.45      & 6.42      & 31.13\%     & 8.46       & 6.43       & 31.18\%     \\
-                                                 &                        & A'                      & 6.62       & 4.65      & 23.82\%     & 6.66      & 4.68      & 23.99\%     & 6.71       & 4.75       & 24.25\%     \\
+                                               & \multirow{7}{*}{DCRNN} & A     & \textbf{6.61}                         & 4.65                                  & \textbf{23.82\%}                      & \textbf{6.65} & 4.69          & 24.00\%          & \textbf{6.71} & 4.76          & 24.29\%          \\
+                                               &                        & OD    & 6.83                                  & 4.87                                  & 25.04\%                               & 7.02          & 5.07          & 25.37\%          & 7.3           & 5.33          & 26.64\%          \\
+                                               &                        & P     & 7.18                                  & 5.27                                  & 27.07\%                               & 7.3           & 5.38          & 27.08\%          & 7.42          & 5.51          & 27.54\%          \\
+                                               &                        & COS   & 6.64                                  & 4.67                                  & 23.96\%                               & 6.69          & 4.72          & 24.18\%          & 6.77          & 4.83          & 24.51\%          \\
+                                               &                        & DTW   & \textbf{6.61}                         & \textbf{4.63}                         & 23.91\%                               & \textbf{6.65} & 4.68          & 24.14\%          & 6.73          & 4.77          & 24.42\%          \\
+                                               &                        & C     & 8.41                                  & 6.39                                  & 30.90\%                               & 8.45          & 6.42          & 31.13\%          & 8.46          & 6.43          & 31.18\%          \\
+                                               &                        & A'    & 6.62                                  & 4.65                                  & \textbf{23.82\%}                      & 6.66          & \textbf{4.68} & \textbf{23.99\%} & \textbf{6.71} & \textbf{4.75} & \textbf{24.25\%} \\
                 \cline{2-12}
-                                                 & \multirow{7}{*}{GWNET} & A                       & 6.84       & 4.84      & 25.51\%     & 7.06      & 5.06      & 27.07\%     & 7.88       & 5.82       & 31.48\%     \\
-                                                 &                        & OD                      & 6.61       & 4.64      & 23.83\%     & 6.65      & 4.68      & 24.07\%     & 6.71       & 4.76       & 24.45\%     \\
-                                                 &                        & P                       & 7.03       & 5.05      & 26.91\%     & 7.1       & 5.16      & 26.62\%     & 7.37       & 5.4        & 27.61\%     \\
-                                                 &                        & COS                     & 6.62       & 4.65      & 23.85\%     & 6.66      & 4.69      & 24.15\%     & 6.74       & 4.78       & 24.75\%     \\
-                                                 &                        & DTW                     & 6.62       & 4.66      & 23.82\%     & 6.66      & 4.7       & 24.06\%     & 6.72       & 4.77       & 24.52\%     \\
-                                                 &                        & C                       & 6.62       & 4.67      & 23.65\%     & 6.65      & 4.7       & 23.77\%     & 6.71       & 4.78       & 24.00\%     \\
-                                                 &                        & A'                      & 6.59       & 4.64      & 23.46\%     & 6.63      & 4.68      & 23.56\%     & 6.69       & 4.74       & 23.85\%     \\
+                                               & \multirow{7}{*}{GWNET} & A     & 6.84                                  & 4.84                                  & 25.51\%                               & 7.06          & 5.06          & 27.07\%          & 7.88          & 5.82          & 31.48\%          \\
+                                               &                        & OD    & 6.61                                  & 4.64                                  & 23.83\%                               & 6.65          & 4.68          & 24.07\%          & 6.71          & 4.76          & 24.45\%          \\
+                                               &                        & P     & \textbf{6.55}                         & \textbf{4.59}                         & 23.51\%                               & \textbf{6.59} & \textbf{4.62} & 23.81\%          & \textbf{6.65} & \textbf{4.69} & 24.05\%          \\
+                                               &                        & COS   & 6.63                                  & 4.67                                  & 24.05\%                               & 6.68          & 4.72          & 24.25\%          & 6.74          & 4.79          & 24.44\%          \\
+                                               &                        & DTW   & 6.6                                   & 4.62                                  & 23.77\%                               & 6.63          & 4.66          & 23.97\%          & 6.7           & 4.74          & 24.34\%          \\
+                                               &                        & C     & 6.62                                  & 4.67                                  & 23.65\%                               & 6.65          & 4.7           & 23.77\%          & 6.71          & 4.78          & 24.00\%          \\
+                                               &                        & A'    & 6.59                                  & 4.64                                  & \textbf{23.46\%}                      & 6.63          & 4.68          & \textbf{23.56\%} & 6.69          & 4.74          & \textbf{23.85\%} \\
                 \bottomrule
             \end{tabular}
         }
@@ -162,10 +162,10 @@ Following previous studies, we use \textit{Root Mean Square Error (RMSE)}, \text
 First, we introduce the performance of the next-hop prediction model. We tried tens of parameter combinations and finally reached $5.47$ on test loss and $73.47\%$ on prediction accuracy. The embedding matrix $E$ in the model was saved for the computation of \textit{refined adjacency matrix} $A'$. Then the comparison of the traffic state prediction models' performance are given in table \ref{performance_results}. To demonstrate how the prediction accuracy varies with time, we report the metrics for 15, 30, 60-minutes ahead prediction. From the table, we obtain the following observations:
 
 \begin{itemize}
-    \item Our $A'$-version has the smallest error in almost every step for the three metrics, especially \textit{MAPE}. This illustrates that the proposed \textit{trajectory-based road correlation} can better capture the spatial dependencies on the road network graph than the adjacency matrix which cannot reflect the real world traffic scenarios.
-    \item With the increasing of prediction steps, all models tend to perform worse because of the difficulty in long-range prediction. Coincidentally, the improvement of long-range metrics is also smaller than short-range. Compared to original $A$-version, our $A'$-version performs best in short-range prediction. For example, for 15-minutes ahead prediction, DCRNN-$A'$ has a $1.55\%$ lower \textit{MAPE} than DCRNN-$A$. But when turning to 60-minutes ahead, the improvement decreases to $0.5\%$. We think this is caused by the limitation of the next-hop model. In the last section, we mentioned that LSTM can capture high-order dependency. However, it is still incapable to catch the dependency for a 60-minutes duration. What's more, our choice for the window size $w=5$ may also lead to the short-sight of LSTM.
-    \item STGCN is good at predicting traffic speed, while DCRNN is expert in traffic flow prediction. However, the difference between them in speed prediction is not as large as flow. The reason is that our \textit{trajectory-based road correlation} captures the road transition information, which is directly related to the propagation of traffic flow, but have nothing to do with the variation of traffic speed.
-    \item \textbf{Ablation Experiment.} Our aim is to check the contribution of adjacency matrix refinement to the final performance. For the ablation study, we build the models STGCN-$C$ and DCRNN-$C$ that directly take correlation matrix $C$ as input. For STGCN, the results show that the $A'$-version is better in almost all cases. But what we want to emphasize is that the refinement process is essential for DCRNN. The table shows that DCRNN-$C$ performs very bad, such as the $55\%$ \textit{MAPE} for traffic flow prediction. In addition, when training the model, we found that the training loss is always increasing, i.e. the model cannot converge. This indicates that the diffusion convolution can only take binary relations as input. Therefore, it is necessary to use \textit{refined adjacency matrix} as DCRNN's input.
+    \item Our $C$ and $A'$-version has the smallest error in almost every step for the three metrics, especially \textit{MAPE}. This illustrates that the proposed \textit{trajectory-based road correlation} can better capture the spatial dependencies on the road network graph than the adjacency matrix which cannot reflect the real world traffic scenarios.
+    \item With the increasing of prediction steps, almost all models tend to perform worse because of the difficulty in long-range prediction. Coincidentally, the improvement of long-range metrics is also smaller than short-range. Compared to original $A$-version, our $A'$-version performs best in short-range prediction. For example, for 15-minutes ahead prediction, DCRNN-$A'$ has a $1.55\%$ lower \textit{MAPE} than DCRNN-$A$. But when turning to 60-minutes ahead, the improvement decreases to $0.5\%$. We think this is caused by the limitation of the next-hop model. In the last section, we mentioned that LSTM can capture high-order dependency. However, it is still incapable to catch the dependency for a 60-minutes duration. What's more, our choice for the window size $w=5$ may also lead to the short-sight of LSTM.
+    \item Comparing the three SOTA models, GWNET gives the best performance in most cases. However, when comparing the graphs, the difference between them in speed prediction is not as large as flow. The reason is that our \textit{trajectory-based road correlation} captures the road transition information, which is directly related to the propagation of traffic flow, but have nothing to do with the variation of traffic speed.
+    \item \textbf{Ablation Experiment.} Our aim is to check the contribution of adjacency matrix refinement to the final performance. For the ablation study, we build the models STGCN-$C$ and DCRNN-$C$ that directly take correlation matrix $C$ as input. For STGCN, the results show that the $A'$-version is better in almost all cases. But what we want to emphasize is that the refinement process is essential for DCRNN. The table shows that DCRNN-$C$ performs very bad, such as the $55\%$ \textit{MAPE} for traffic flow prediction. In addition, when training the model, we found that the training loss is always increasing, i.e. the model cannot converge. And there are similar cases for other types of graph. We think that this is related to the logic of diffusion convolution process, which still needs digging deep into the reasons in future work. Therefore, it is necessary to use \textit{refined adjacency matrix} as DCRNN's input.
 \end{itemize}
 
 \subsection{Parameter Study}
@@ -203,27 +203,27 @@ Secondly, we analyze the choice of $k$ when calculating \textit{refined adjacenc
         \label{k_table}
         \begin{tabular}{c|c|c}
             \toprule
-  
-            \textbf{Model} & \textbf{Traffic State} & \textbf{$k$}\\
-  
-            \hline
-  
-            \multirow{2}{*}{STGCN-$A'$} & Flow & $19$\\
-            \cline{2-3}
-            ~ & Speed & $10$\\
+
+            \textbf{Model}              & \textbf{Traffic State} & \textbf{$k$} \\
 
             \hline
 
-            \multirow{2}{*}{DCRNN-$A'$} & Flow & $8$\\
+            \multirow{2}{*}{STGCN-$A'$} & Flow                   & $19$         \\
             \cline{2-3}
-            ~ & Speed & $10$\\
+            ~                           & Speed                  & $10$         \\
 
             \hline
 
-            \multirow{2}{*}{GWNET-$A'$} & Flow & $6$\\
+            \multirow{2}{*}{DCRNN-$A'$} & Flow                   & $8$          \\
             \cline{2-3}
-            ~ & Speed & $11$\\
-  
+            ~                           & Speed                  & $10$         \\
+
+            \hline
+
+            \multirow{2}{*}{GWNET-$A'$} & Flow                   & $6$          \\
+            \cline{2-3}
+            ~                           & Speed                  & $11$         \\
+
             \bottomrule
         \end{tabular}
     \end{center}
@@ -238,7 +238,7 @@ In this section, we give a visualization for road correlation and select a speci
     \label{fig: vis_road_cor}
     \begin{subfigure}[t]{0.33\linewidth}
         \centering
-        \includegraphics[width=\textwidth]{images/heatmap.png}
+        \includegraphics[width=\textwidth]{images/heatmap_bwr.png}
         \caption{Heatmap}
         \label{fig: heatmap}
     \end{subfigure}
