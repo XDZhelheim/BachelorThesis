@@ -61,11 +61,14 @@ For traffic state prediction models, the experiments were performed on DL-Traff\
 We selected two baseline traffic prediction models that can effectively capture the spatial dependencies in the graph.
 
 \begin{itemize}
-    \item \textbf{STGCN}\cite{STGCN} (Spatio-Temporal Graph Convolutional Networks). STGCN is proposed in 2018, which is one of the earliest GCN models for traffic prediction. It uses gated TCN\cite{TCN} to capture temporal dependencies and applies spectral graph convolution\cite{GCN0} on graph to model the spatial dependencies.
+    \item \textbf{HA} (Historical Average). Average the corresponding values from historical days as the prediction result.
+    \item \textbf{CP} (Copy Last Steps). Directly copy the last one or multiple steps as the prediction result.
+    \item \textbf{STGCN}\cite{STGCN} (Spatio-Temporal Graph Convolutional Networks). STGCN is proposed in 2018, which is one of the earliest spatiotemporal GCN models for traffic prediction. It uses gated TCN\cite{TCN} to capture temporal dependencies and applies spectral graph convolution\cite{GCN0} on graph to model the spatial dependencies.
     \item \textbf{DCRNN}\cite{DCRNN} (Diffusion Convolutional Recurrent Neural Network). DCRNN is another typical GCN model that is also proposed in 2018. Instead of spectral graph convolution, it implements diffusion convolution through bidirectional random walk to capture the transition information. Temporally, it integrates diffusion convolution into GRU and proposed an encoder-decoder structure to enable multistep prediction.
+    \item \textbf{GWNET}\cite{GWNET} (Graph WaveNet). Graph WaveNet is a GCN model proposed in 2019, which still remains being one of the best SOTA models nowadays. It adopts adaptive/learnable graph rather than a static one that used in STGCN and DCRNN. By combining the original adjacency matrix and the learned graph, it can rapidly boost the prediction accuracy of traffic states.
 \end{itemize}
 
-We set the input graph as (1) \textit{adjacency matrix} $A$, (2) \textit{refined adjacency matrix} $A'$ to compare their performance and illustrate the effect of road correlation in traffic state prediction. The corresponding models are denoted as STGCN-$A$, STGCN-$A'$, DCRNN-$A$ and DCRNN-$A'$. In addition, we kept the (3) \textit{road correlation matrix} $C$ as input to give an ablation experiment. They are denoted as STGCN-$C$ and DCRNN-$C$.
+We set the input graph as (1) \textit{adjacency matrix} $A$, (2) \textit{OD matrix} (3) \textit{Pearson correlation coefficient matrix of temporal features} $P$ (4) \textit{cosine similarity matrix of temporal features} (5) \textit{DTW distance of temporal features} (6) \textit{road correlation matrix} $C$ (7) \textit{refined adjacency matrix} $A'$ to compare their performance and illustrate the effect of road correlation in traffic state prediction. We give an ablation study by comparing the performance of $C$ and $A'$.
 
 \subsection{Evaluation Metrics}
 Following previous studies, we use \textit{Root Mean Square Error (RMSE)}, \textit{Mean Absolute Error (MAE)}, and \textit{Mean Absolute Percentage Error (MAPE)} as the metrics to show the performance of different methods. Zero values will be ignored, and lower errors indicate better performance. The definition of them are as following.
@@ -87,11 +90,11 @@ Following previous studies, we use \textit{Root Mean Square Error (RMSE)}, \text
             \begin{tabular}{c|c|c|ccc|ccc|ccc}
                 \toprule
                 
-                \multirow{2}{*}{Traffic State} & \multirow{2}{*}{Model} & \multirow{2}{*}{G Type} & \multicolumn{3}{c|}{3 Steps / 15 min} & \multicolumn{3}{c|}{6 Steps / 30 min} & \multicolumn{3}{c}{12 Steps / 60 min} \\
+                \multirow{2}{*}{Traffic State} & \multirow{2}{*}{Model} & Graph & \multicolumn{3}{c|}{3 Steps / 15 min} & \multicolumn{3}{c|}{6 Steps / 30 min} & \multicolumn{3}{c}{12 Steps / 60 min} \\
 
                 \cline{4-12}
 
-                                                 &                        &                         & RMSE       & MAE       & MAPE        & RMSE      & MAE       & MAPE        & RMSE       & MAE        & MAPE        \\
+                                                 &                        & Type                    & RMSE       & MAE       & MAPE        & RMSE      & MAE       & MAPE        & RMSE       & MAE        & MAPE        \\
                 \hline
 
                 \multirow{23}{*}{Flow}           & HA                     & -                       & 5.84       & 4.35      & 41.18\%     & 5.82      & 4.34      & 41.10\%     & 5.80       & 4.33       & 40.98\%     \\
