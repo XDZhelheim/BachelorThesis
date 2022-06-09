@@ -396,6 +396,13 @@
   \end{center}
   \vskip 1.5cm
 }
+\newcommand\英文摘要标题我自己搞的{
+  \begin{center}
+    \二号 Traffic State Prediction Based on Road Correlation Analysis with GPS Data\\[9pt]
+    \四号\姓名@英 \\[9pt]
+    (\小四{\系别@英 \quad Thesis Advisor: \指导老师@英})
+  \end{center}
+}
 \newenvironment{中文摘要}[1]%
   {\setsepchar{；}\readlist\args{#1}
     \begin{spacing}{1.45}
